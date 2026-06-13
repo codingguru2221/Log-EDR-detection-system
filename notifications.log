@@ -1,0 +1,181 @@
+2026-06-07 15:52:41,533 - INFO - [MEDIUM] Critical system error: Service Control Manager | WirelessBackupService %%2
+2026-06-07 15:56:53,747 - INFO - [MEDIUM] Critical system error: Service Control Manager | WirelessBackupService %%2
+2026-06-08 20:34:32,854 - INFO - [HIGH] Correlated intrusion pattern | Multiple suspicious behaviors were correlated across ai-attribution, process, resource. Review the i
+2026-06-08 20:36:22,882 - INFO - [HIGH] Correlated intrusion pattern | Multiple suspicious behaviors were correlated across ai-attribution, process, resource. Review the i
+2026-06-08 20:42:33,305 - INFO - [HIGH] Correlated intrusion pattern | Multiple suspicious behaviors were correlated across ai-attribution, process, resource. Review the i
+2026-06-08 20:46:50,024 - INFO - [HIGH] Correlated intrusion pattern | Multiple suspicious behaviors were correlated across ai-attribution, behavior, process, resource. Re
+2026-06-08 20:50:13,582 - INFO - [HIGH] Correlated intrusion pattern | Multiple suspicious behaviors were correlated across ai-attribution, process, resource. Review the i
+2026-06-08 20:53:31,311 - INFO - [HIGH] Correlated intrusion pattern | Multiple suspicious behaviors were correlated across ai-attribution, device, process, resource. Revi
+2026-06-08 21:02:41,312 - INFO - [HIGH] Correlated intrusion pattern | Multiple suspicious behaviors were correlated across ai-attribution, process, resource. Review the i
+2026-06-08 21:06:22,689 - INFO - [HIGH] Correlated intrusion pattern | Multiple suspicious behaviors were correlated across ai-attribution, behavior, process, resource. Re
+2026-06-08 21:33:09,220 - INFO - [HIGH] Correlated intrusion pattern | Multiple suspicious behaviors were correlated across ai-attribution, process, resource. Review the i
+2026-06-08 21:37:23,080 - INFO - [HIGH] Correlated intrusion pattern | Multiple suspicious behaviors were correlated across ai-attribution, process, resource. Review the i
+2026-06-08 21:46:46,805 - INFO - [HIGH] Correlated intrusion pattern | Multiple suspicious behaviors were correlated across ai-attribution, process, resource. Review the i
+2026-06-08 21:58:01,304 - INFO - [HIGH] Correlated intrusion pattern | Multiple suspicious behaviors were correlated across ai-attribution, process, resource. Review the i
+2026-06-08 22:01:59,304 - INFO - [HIGH] Correlated intrusion pattern | Multiple suspicious behaviors were correlated across ai-attribution, process, resource. Review the i
+2026-06-08 22:04:31,278 - INFO - [HIGH] Correlated intrusion pattern | Multiple suspicious behaviors were correlated across ai-attribution, process, resource. Review the i
+2026-06-08 22:08:27,804 - INFO - [HIGH] Correlated intrusion pattern | Multiple suspicious behaviors were correlated across ai-attribution, process, resource. Review the i
+2026-06-08 22:11:34,066 - INFO - [HIGH] Correlated intrusion pattern | Multiple suspicious behaviors were correlated across ai-attribution, process, resource. Review the i
+2026-06-08 23:14:34,116 - INFO - [HIGH] Correlated intrusion pattern | Multiple suspicious behaviors were correlated across behavior, code-protection, process. Review the 
+2026-06-09 12:52:45,670 - INFO - [CRITICAL] Test Critical Alert | This is a test critical notification from Trinetra Sentinel
+2026-06-09 12:52:46,817 - WARNING - Windows toast notifications unavailable. Using sound alerts only.
+2026-06-09 12:52:48,807 - INFO - [HIGH] Test High Alert | USB device inserted - scan recommended
+2026-06-09 12:55:48,008 - INFO - [CRITICAL] USB Threat Detected | Risky executable found on USB drive E:. Do not open files.
+2026-06-09 12:55:48,254 - INFO - WPF popup sent: [CRITICAL] USB Threat Detected
+2026-06-09 13:12:24,842 - INFO - [CRITICAL] Ransomware-like file activity detected | Rapid file activity crossed the local threshold: 150 writes, 30 renames, 20 extension changes in 10 seconds.
+2026-06-09 13:12:24,975 - INFO - WPF popup sent: [CRITICAL] Ransomware-like file activity detected
+2026-06-09 13:12:28,844 - INFO - [HIGH] Potential threat detected in logs | Threat pattern 'malware' found in Windows Defender log source.
+2026-06-09 13:12:28,870 - INFO - WPF popup sent: [HIGH] Potential threat detected in logs
+2026-06-09 13:12:31,846 - INFO - [HIGH] Correlated intrusion pattern | Multiple suspicious behaviors were correlated across ai-attribution, process, resource. Review the incident chain immedi
+2026-06-09 13:12:31,858 - INFO - WPF popup sent: [HIGH] Correlated intrusion pattern
+2026-06-09 13:12:34,848 - INFO - [HIGH] Critical system error: Microsoft-Windows-Kernel-Power | The system has rebooted without cleanly shutting down first. This could be caused by the system not responding or crashi
+2026-06-09 13:12:34,864 - INFO - WPF popup sent: [HIGH] Critical system error: Microsoft-Windows-Kernel-Power
+2026-06-09 13:12:37,850 - INFO - [HIGH] USB threat-like content detected | Auto scan found 4 risky file(s) on Kingston USB: 2 high, 2 medium. Do not open files until reviewed.
+2026-06-09 13:12:37,863 - INFO - WPF popup sent: [HIGH] USB threat-like content detected
+2026-06-09 13:12:40,853 - INFO - [HIGH] Startup registry entry modified | A startup entry named 'UpdaterService' was created or changed in the current user autorun registry.
+2026-06-09 13:12:40,885 - INFO - WPF popup sent: [HIGH] Startup registry entry modified
+2026-06-09 13:12:43,855 - INFO - [HIGH] Malware signature detected | Known malware pattern matched in process chain analysis. Immediate action recommended.
+2026-06-09 13:12:43,885 - INFO - WPF popup sent: [HIGH] Malware signature detected
+2026-06-09 13:12:46,857 - INFO - [MEDIUM] Application crash detected: chrome.exe | Application chrome.exe crashed unexpectedly. Check Windows Application log for details.
+2026-06-09 13:12:46,870 - INFO - WPF popup sent: [MEDIUM] Application crash detected: chrome.exe
+2026-06-09 13:13:22,017 - INFO - [CRITICAL] Ransomware-like file activity detected | Rapid file activity crossed the local threshold: 150 writes, 30 renames, 20 extension changes in 10 seconds.
+2026-06-09 13:13:22,124 - INFO - WPF popup sent: [CRITICAL] Ransomware-like file activity detected
+2026-06-09 13:13:26,019 - INFO - [HIGH] Potential threat detected in logs | Threat pattern 'malware' found in Windows Defender log source.
+2026-06-09 13:13:26,034 - INFO - WPF popup sent: [HIGH] Potential threat detected in logs
+2026-06-09 13:13:29,020 - INFO - [HIGH] Correlated intrusion pattern | Multiple suspicious behaviors were correlated across ai-attribution, process, resource. Review the incident chain immedi
+2026-06-09 13:13:29,036 - INFO - WPF popup sent: [HIGH] Correlated intrusion pattern
+2026-06-09 13:15:41,721 - INFO - [CRITICAL] Ransomware-like file activity detected | Rapid file activity crossed the local threshold: 150 writes, 30 renames, 20 extension changes in 10 seconds.
+2026-06-09 13:15:41,809 - INFO - WPF popup sent: [CRITICAL] Ransomware-like file activity detected
+2026-06-09 13:15:45,725 - INFO - [HIGH] Potential threat detected in logs | Threat pattern 'malware' found in Windows Defender log source.
+2026-06-09 13:15:45,746 - INFO - WPF popup sent: [HIGH] Potential threat detected in logs
+2026-06-09 13:15:48,726 - INFO - [HIGH] Correlated intrusion pattern | Multiple suspicious behaviors were correlated across ai-attribution, process, resource. Review the incident chain immedi
+2026-06-09 13:15:48,744 - INFO - WPF popup sent: [HIGH] Correlated intrusion pattern
+2026-06-09 13:15:51,728 - INFO - [HIGH] Critical system error: Microsoft-Windows-Kernel-Power | The system has rebooted without cleanly shutting down first. This could be caused by the system not responding or crashi
+2026-06-09 13:15:51,758 - INFO - WPF popup sent: [HIGH] Critical system error: Microsoft-Windows-Kernel-Power
+2026-06-09 13:15:54,729 - INFO - [HIGH] USB threat-like content detected | Auto scan found 4 risky file(s) on Kingston USB: 2 high, 2 medium. Do not open files until reviewed.
+2026-06-09 13:15:54,762 - INFO - WPF popup sent: [HIGH] USB threat-like content detected
+2026-06-09 13:15:57,741 - INFO - [HIGH] Startup registry entry modified | A startup entry named 'UpdaterService' was created or changed in the current user autorun registry.
+2026-06-09 13:15:57,764 - INFO - WPF popup sent: [HIGH] Startup registry entry modified
+2026-06-09 13:16:00,743 - INFO - [HIGH] Malware signature detected | Known malware pattern matched in process chain analysis. Immediate action recommended.
+2026-06-09 13:16:00,758 - INFO - WPF popup sent: [HIGH] Malware signature detected
+2026-06-09 13:16:01,215 - INFO - [HIGH] Potential threat detected in logs | Registry Started 	ProviderName=Registry
+	NewProviderState=Started
+
+	SequenceNumber=1
+
+	HostName=ConsoleHost
+	HostV
+2026-06-09 13:16:01,229 - INFO - [HIGH] Correlated intrusion pattern | Multiple suspicious behaviors were correlated across process, resource, security. Review the incident chain immediately.
+2026-06-09 13:16:01,259 - INFO - WPF popup sent: [HIGH] Potential threat detected in logs
+2026-06-09 13:16:01,326 - INFO - WPF popup sent: [HIGH] Correlated intrusion pattern
+2026-06-09 13:16:03,745 - INFO - [MEDIUM] Application crash detected: chrome.exe | Application chrome.exe crashed unexpectedly. Check Windows Application log for details.
+2026-06-09 13:16:03,756 - INFO - WPF popup sent: [MEDIUM] Application crash detected: chrome.exe
+2026-06-09 13:16:06,747 - INFO - [MEDIUM] Mass file deletion detected | Code protection threshold crossed in 12 seconds: 5 writes, 25 deletions, 0 renames.
+2026-06-09 13:16:06,758 - INFO - WPF popup sent: [MEDIUM] Mass file deletion detected
+2026-06-09 13:16:09,749 - INFO - [MEDIUM] AI-origin shell process detected | powershell.exe appears to originate from Cursor AI with 87% confidence.
+2026-06-09 13:16:09,761 - INFO - WPF popup sent: [MEDIUM] AI-origin shell process detected
+2026-06-09 13:16:12,754 - INFO - [MEDIUM] Encoded PowerShell execution | An encoded PowerShell command was observed. This technique can hide malicious script behavior.
+2026-06-09 13:16:12,773 - INFO - WPF popup sent: [MEDIUM] Encoded PowerShell execution
+2026-06-09 13:16:15,756 - INFO - [MEDIUM] Dangerous command observed | rm -rf / was seen from Unknown user or process with 40% confidence.
+2026-06-09 13:16:15,767 - INFO - WPF popup sent: [MEDIUM] Dangerous command observed
+2026-06-09 13:16:18,758 - INFO - [MEDIUM] Service failure: Windows Update | Service Windows Update encountered a failure. Check system logs for recovery attempts.
+2026-06-09 13:16:18,777 - INFO - WPF popup sent: [MEDIUM] Service failure: Windows Update
+2026-06-09 13:16:21,770 - INFO - [MEDIUM] Dangerous command observed | git clean -fd was seen from Cursor AI with 82% confidence.
+2026-06-09 13:16:21,787 - INFO - WPF popup sent: [MEDIUM] Dangerous command observed
+2026-06-09 13:16:24,778 - INFO - [MEDIUM] Mass file rename detected | Code protection threshold crossed in 12 seconds: 2 writes, 0 deletions, 35 renames.
+2026-06-09 13:16:24,799 - INFO - WPF popup sent: [MEDIUM] Mass file rename detected
+2026-06-09 13:20:02,747 - INFO - [CRITICAL] USB Threat Detected | Risky executable found on USB drive E:. Do not open files.
+2026-06-09 13:20:02,889 - INFO - WPF popup sent: [CRITICAL] USB Threat Detected
+2026-06-09 13:21:48,173 - INFO - [CRITICAL] Ransomware-like file activity detected | Rapid file activity crossed the local threshold: 150 writes, 30 renames, 20 extension changes in 10 seconds.
+2026-06-09 13:23:49,954 - INFO - [CRITICAL] Ransomware-like file activity detected | Rapid file activity crossed the local threshold: 150 writes, 30 renames, 20 extension changes in 10 seconds.
+2026-06-09 13:24:51,334 - INFO - [CRITICAL] Ransomware-like file activity detected | Rapid file activity crossed the local threshold: 150 writes, 30 renames, 20 extension changes in 10 seconds.
+2026-06-09 13:26:00,504 - INFO - [CRITICAL] Ransomware-like file activity detected | Rapid file activity crossed the local threshold: 150 writes, 30 renames, 20 extension changes in 10 seconds.
+2026-06-09 13:27:04,465 - INFO - [HIGH] Potential threat detected in logs | Threat pattern 'malware' found in Windows Defender log source.
+2026-06-09 13:27:04,569 - INFO - WPF popup sent: [HIGH] Potential threat detected in logs
+2026-06-09 13:27:07,467 - INFO - [HIGH] Correlated intrusion pattern | Multiple suspicious behaviors were correlated across ai-attribution, process, resource. Review the incident chain immedi
+2026-06-09 13:27:07,483 - INFO - WPF popup sent: [HIGH] Correlated intrusion pattern
+2026-06-09 13:27:10,469 - INFO - [HIGH] Critical system error: Microsoft-Windows-Kernel-Power | The system has rebooted without cleanly shutting down first. This could be caused by the system not responding or crashi
+2026-06-09 13:27:10,487 - INFO - WPF popup sent: [HIGH] Critical system error: Microsoft-Windows-Kernel-Power
+2026-06-09 13:27:13,471 - INFO - [HIGH] USB threat-like content detected | Auto scan found 4 risky file(s) on Kingston USB: 2 high, 2 medium. Do not open files until reviewed.
+2026-06-09 13:27:13,487 - INFO - WPF popup sent: [HIGH] USB threat-like content detected
+2026-06-09 13:27:16,474 - INFO - [HIGH] Startup registry entry modified | A startup entry named 'UpdaterService' was created or changed in the current user autorun registry.
+2026-06-09 13:27:16,498 - INFO - WPF popup sent: [HIGH] Startup registry entry modified
+2026-06-09 13:27:19,477 - INFO - [HIGH] Malware signature detected | Known malware pattern matched in process chain analysis. Immediate action recommended.
+2026-06-09 13:31:15,698 - INFO - WPF popup sent: [CRITICAL] WPF Test
+2026-06-09 13:31:37,278 - INFO - [CRITICAL] Ransomware-like file activity detected | Rapid file activity crossed the local threshold: 150 writes, 30 renames, 20 extension changes in 10 seconds.
+2026-06-09 13:37:16,950 - INFO - [CRITICAL] Ransomware-like file activity detected | Rapid file activity crossed the local threshold: 150 writes, 30 renames, 20 extension changes in 10 seconds.
+2026-06-09 13:37:19,071 - INFO - WPF popup sent: [CRITICAL] Ransomware-like file activity detected
+2026-06-09 13:37:20,951 - INFO - [HIGH] Potential threat detected in logs | Threat pattern 'malware' found in Windows Defender log source.
+2026-06-09 13:37:22,981 - INFO - WPF popup sent: [HIGH] Potential threat detected in logs
+2026-06-09 13:37:23,953 - INFO - [HIGH] Correlated intrusion pattern | Multiple suspicious behaviors were correlated across ai-attribution, process, resource. Review the incident chain immedi
+2026-06-09 13:37:25,974 - INFO - WPF popup sent: [HIGH] Correlated intrusion pattern
+2026-06-09 13:37:26,954 - INFO - [HIGH] Critical system error: Microsoft-Windows-Kernel-Power | The system has rebooted without cleanly shutting down first. This could be caused by the system not responding or crashi
+2026-06-09 13:37:28,991 - INFO - WPF popup sent: [HIGH] Critical system error: Microsoft-Windows-Kernel-Power
+2026-06-09 13:37:29,956 - INFO - [HIGH] USB threat-like content detected | Auto scan found 4 risky file(s) on Kingston USB: 2 high, 2 medium. Do not open files until reviewed.
+2026-06-09 13:37:31,987 - INFO - WPF popup sent: [HIGH] USB threat-like content detected
+2026-06-09 13:37:32,957 - INFO - [HIGH] Startup registry entry modified | A startup entry named 'UpdaterService' was created or changed in the current user autorun registry.
+2026-06-09 13:37:34,984 - INFO - WPF popup sent: [HIGH] Startup registry entry modified
+2026-06-09 13:37:35,958 - INFO - [HIGH] Malware signature detected | Known malware pattern matched in process chain analysis. Immediate action recommended.
+2026-06-09 13:37:37,980 - INFO - WPF popup sent: [HIGH] Malware signature detected
+2026-06-09 13:37:38,960 - INFO - [MEDIUM] Application crash detected: chrome.exe | Application chrome.exe crashed unexpectedly. Check Windows Application log for details.
+2026-06-09 13:37:40,979 - INFO - WPF popup sent: [MEDIUM] Application crash detected: chrome.exe
+2026-06-09 13:37:41,961 - INFO - [MEDIUM] Mass file deletion detected | Code protection threshold crossed in 12 seconds: 5 writes, 25 deletions, 0 renames.
+2026-06-09 13:37:43,994 - INFO - WPF popup sent: [MEDIUM] Mass file deletion detected
+2026-06-09 13:37:44,963 - INFO - [MEDIUM] AI-origin shell process detected | powershell.exe appears to originate from Cursor AI with 87% confidence.
+2026-06-09 13:37:46,987 - INFO - WPF popup sent: [MEDIUM] AI-origin shell process detected
+2026-06-09 13:37:47,964 - INFO - [MEDIUM] Encoded PowerShell execution | An encoded PowerShell command was observed. This technique can hide malicious script behavior.
+2026-06-09 13:37:49,979 - INFO - WPF popup sent: [MEDIUM] Encoded PowerShell execution
+2026-06-09 13:37:50,966 - INFO - [MEDIUM] Dangerous command observed | rm -rf / was seen from Unknown user or process with 40% confidence.
+2026-06-09 13:37:52,997 - INFO - WPF popup sent: [MEDIUM] Dangerous command observed
+2026-06-09 13:37:53,970 - INFO - [MEDIUM] Service failure: Windows Update | Service Windows Update encountered a failure. Check system logs for recovery attempts.
+2026-06-09 13:37:55,990 - INFO - WPF popup sent: [MEDIUM] Service failure: Windows Update
+2026-06-09 13:37:56,972 - INFO - [MEDIUM] Dangerous command observed | git clean -fd was seen from Cursor AI with 82% confidence.
+2026-06-09 13:37:59,033 - INFO - WPF popup sent: [MEDIUM] Dangerous command observed
+2026-06-09 13:37:59,974 - INFO - [MEDIUM] Mass file rename detected | Code protection threshold crossed in 12 seconds: 2 writes, 0 deletions, 35 renames.
+2026-06-09 13:38:01,996 - INFO - WPF popup sent: [MEDIUM] Mass file rename detected
+2026-06-09 13:38:02,975 - INFO - [MEDIUM] Windows account lockout detected | A local or domain account was locked after repeated authentication failures.
+2026-06-09 13:38:04,994 - INFO - WPF popup sent: [MEDIUM] Windows account lockout detected
+2026-06-09 13:38:05,976 - INFO - [MEDIUM] USB scan found risky files | Auto scan found 3 risky file(s) on SanDisk USB: 0 high, 3 medium. Do not open files until reviewed.
+2026-06-09 13:38:07,994 - INFO - WPF popup sent: [MEDIUM] USB scan found risky files
+2026-06-09 13:38:08,978 - INFO - [MEDIUM] Bulk file modification detected | Code protection threshold crossed in 12 seconds: 55 writes, 0 deletions, 0 renames.
+2026-06-09 13:38:11,003 - INFO - WPF popup sent: [MEDIUM] Bulk file modification detected
+2026-06-09 13:38:11,980 - INFO - [MEDIUM] USB storage device inserted | External USB device connected: Kingston DataTraveler (E:). Review the device before opening files.
+2026-06-09 13:38:13,998 - INFO - WPF popup sent: [MEDIUM] USB storage device inserted
+2026-06-09 13:38:14,981 - INFO - [MEDIUM] Repeated login failures detected | Possible brute force behavior: 8 failed Windows logins observed within 60 seconds.
+2026-06-10 12:09:09,216 - INFO - [MEDIUM] USB storage device inserted | External USB device connected: USB Device (E:\). Review the device before opening files.
+2026-06-10 12:09:11,312 - INFO - WPF popup sent: [MEDIUM] USB storage device inserted
+2026-06-10 12:23:00,070 - INFO - [CRITICAL] Ransomware-like file activity detected | Rapid file activity crossed the local threshold: 150 writes, 30 renames, 20 extension changes in 10 seconds.
+2026-06-10 12:23:02,232 - INFO - WPF popup sent: [CRITICAL] Ransomware-like file activity detected
+2026-06-10 12:23:04,073 - INFO - [HIGH] Potential threat detected in logs | Threat pattern 'malware' found in Windows Defender log source.
+2026-06-10 12:23:06,146 - INFO - WPF popup sent: [HIGH] Potential threat detected in logs
+2026-06-10 12:23:07,075 - INFO - [HIGH] Correlated intrusion pattern | Multiple suspicious behaviors were correlated across ai-attribution, process, resource. Review the incident chain immedi
+2026-06-10 12:23:09,116 - INFO - WPF popup sent: [HIGH] Correlated intrusion pattern
+2026-06-10 12:23:10,078 - INFO - [HIGH] Critical system error: Microsoft-Windows-Kernel-Power | The system has rebooted without cleanly shutting down first. This could be caused by the system not responding or crashi
+2026-06-10 12:23:12,109 - INFO - WPF popup sent: [HIGH] Critical system error: Microsoft-Windows-Kernel-Power
+2026-06-10 12:23:13,081 - INFO - [HIGH] USB threat-like content detected | Auto scan found 4 risky file(s) on Kingston USB: 2 high, 2 medium. Do not open files until reviewed.
+2026-06-10 12:23:15,136 - INFO - WPF popup sent: [HIGH] USB threat-like content detected
+2026-06-10 12:23:16,083 - INFO - [HIGH] Startup registry entry modified | A startup entry named 'UpdaterService' was created or changed in the current user autorun registry.
+2026-06-10 12:23:18,118 - INFO - WPF popup sent: [HIGH] Startup registry entry modified
+2026-06-10 12:23:19,085 - INFO - [HIGH] Malware signature detected | Known malware pattern matched in process chain analysis. Immediate action recommended.
+2026-06-10 12:23:21,130 - INFO - WPF popup sent: [HIGH] Malware signature detected
+2026-06-10 12:23:22,091 - INFO - [MEDIUM] Application crash detected: chrome.exe | Application chrome.exe crashed unexpectedly. Check Windows Application log for details.
+2026-06-10 12:23:24,136 - INFO - WPF popup sent: [MEDIUM] Application crash detected: chrome.exe
+2026-06-10 12:23:25,093 - INFO - [MEDIUM] Mass file deletion detected | Code protection threshold crossed in 12 seconds: 5 writes, 25 deletions, 0 renames.
+2026-06-10 12:23:27,125 - INFO - WPF popup sent: [MEDIUM] Mass file deletion detected
+2026-06-10 12:23:28,095 - INFO - [MEDIUM] AI-origin shell process detected | powershell.exe appears to originate from Cursor AI with 87% confidence.
+2026-06-10 12:23:30,138 - INFO - WPF popup sent: [MEDIUM] AI-origin shell process detected
+2026-06-10 12:23:31,098 - INFO - [MEDIUM] Encoded PowerShell execution | An encoded PowerShell command was observed. This technique can hide malicious script behavior.
+2026-06-10 12:23:33,128 - INFO - WPF popup sent: [MEDIUM] Encoded PowerShell execution
+2026-06-10 12:23:34,100 - INFO - [MEDIUM] Dangerous command observed | rm -rf / was seen from Unknown user or process with 40% confidence.
+2026-06-10 12:23:36,138 - INFO - WPF popup sent: [MEDIUM] Dangerous command observed
+2026-06-10 12:23:37,102 - INFO - [MEDIUM] Service failure: Windows Update | Service Windows Update encountered a failure. Check system logs for recovery attempts.
+2026-06-10 12:23:39,129 - INFO - WPF popup sent: [MEDIUM] Service failure: Windows Update
+2026-06-10 12:23:40,104 - INFO - [MEDIUM] Dangerous command observed | git clean -fd was seen from Cursor AI with 82% confidence.
+2026-06-10 12:23:42,121 - INFO - WPF popup sent: [MEDIUM] Dangerous command observed
+2026-06-10 12:23:43,106 - INFO - [MEDIUM] Mass file rename detected | Code protection threshold crossed in 12 seconds: 2 writes, 0 deletions, 35 renames.
+2026-06-10 12:23:45,137 - INFO - WPF popup sent: [MEDIUM] Mass file rename detected
+2026-06-10 12:23:46,108 - INFO - [MEDIUM] Windows account lockout detected | A local or domain account was locked after repeated authentication failures.
+2026-06-10 12:23:48,150 - INFO - WPF popup sent: [MEDIUM] Windows account lockout detected
+2026-06-10 12:23:49,110 - INFO - [MEDIUM] USB scan found risky files | Auto scan found 3 risky file(s) on SanDisk USB: 0 high, 3 medium. Do not open files until reviewed.
+2026-06-10 12:23:51,140 - WARNING - WPF popup failed (rc=3221225786): 
+2026-06-10 12:23:51,157 - INFO - Balloon tip sent: [MEDIUM] USB scan found risky files

@@ -1,0 +1,497 @@
+2026-06-08 20:13:28,444 ERROR backend.monitor: Monitor monitor loop failed
+Traceback (most recent call last):
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\backend\monitor.py", line 69, in run
+    anomaly = self.engine.inspect_snapshot(snapshot)
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\backend\detection.py", line 162, in inspect_snapshot
+    if not self.anomaly_detector.observe(snapshot):
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\backend\detection.py", line 31, in observe
+    if not self.model or len(self.samples) < 24:
+           ^^^^^^^^^^
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\.venv\Lib\site-packages\sklearn\ensemble\_base.py", line 154, in __len__
+    return len(self.estimators_)
+               ^^^^^^^^^^^^^^^^
+AttributeError: 'IsolationForest' object has no attribute 'estimators_'. Did you mean: 'estimator'?
+2026-06-08 20:13:32,447 ERROR backend.monitor: Monitor monitor loop failed
+Traceback (most recent call last):
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\backend\monitor.py", line 69, in run
+    anomaly = self.engine.inspect_snapshot(snapshot)
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\backend\detection.py", line 162, in inspect_snapshot
+    if not self.anomaly_detector.observe(snapshot):
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\backend\detection.py", line 31, in observe
+    if not self.model or len(self.samples) < 24:
+           ^^^^^^^^^^
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\.venv\Lib\site-packages\sklearn\ensemble\_base.py", line 154, in __len__
+    return len(self.estimators_)
+               ^^^^^^^^^^^^^^^^
+AttributeError: 'IsolationForest' object has no attribute 'estimators_'. Did you mean: 'estimator'?
+2026-06-08 20:14:19,506 ERROR backend.monitor: Monitor monitor loop failed
+Traceback (most recent call last):
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\backend\monitor.py", line 69, in run
+    anomaly = self.engine.inspect_snapshot(snapshot)
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\backend\detection.py", line 162, in inspect_snapshot
+    if not self.anomaly_detector.observe(snapshot):
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\backend\detection.py", line 31, in observe
+    if not self.model or len(self.samples) < 24:
+           ^^^^^^^^^^
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\.venv\Lib\site-packages\sklearn\ensemble\_base.py", line 154, in __len__
+    return len(self.estimators_)
+               ^^^^^^^^^^^^^^^^
+AttributeError: 'IsolationForest' object has no attribute 'estimators_'. Did you mean: 'estimator'?
+2026-06-08 20:14:22,818 ERROR backend.monitor: Monitor monitor loop failed
+Traceback (most recent call last):
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\backend\monitor.py", line 69, in run
+    anomaly = self.engine.inspect_snapshot(snapshot)
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\backend\detection.py", line 162, in inspect_snapshot
+    if not self.anomaly_detector.observe(snapshot):
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\backend\detection.py", line 31, in observe
+    if not self.model or len(self.samples) < 24:
+           ^^^^^^^^^^
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\.venv\Lib\site-packages\sklearn\ensemble\_base.py", line 154, in __len__
+    return len(self.estimators_)
+               ^^^^^^^^^^^^^^^^
+AttributeError: 'IsolationForest' object has no attribute 'estimators_'. Did you mean: 'estimator'?
+2026-06-08 20:25:11,030 ERROR backend.monitor: Monitor monitor loop failed
+Traceback (most recent call last):
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\backend\monitor.py", line 69, in run
+    anomaly = self.engine.inspect_snapshot(snapshot)
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\backend\detection.py", line 162, in inspect_snapshot
+    if not self.anomaly_detector.observe(snapshot):
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\backend\detection.py", line 31, in observe
+    if not self.model or len(self.samples) < 24:
+           ^^^^^^^^^^
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\.venv\Lib\site-packages\sklearn\ensemble\_base.py", line 154, in __len__
+    return len(self.estimators_)
+               ^^^^^^^^^^^^^^^^
+AttributeError: 'IsolationForest' object has no attribute 'estimators_'. Did you mean: 'estimator'?
+2026-06-08 20:25:14,809 ERROR backend.monitor: Monitor monitor loop failed
+Traceback (most recent call last):
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\backend\monitor.py", line 69, in run
+    anomaly = self.engine.inspect_snapshot(snapshot)
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\backend\detection.py", line 162, in inspect_snapshot
+    if not self.anomaly_detector.observe(snapshot):
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\backend\detection.py", line 31, in observe
+    if not self.model or len(self.samples) < 24:
+           ^^^^^^^^^^
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\.venv\Lib\site-packages\sklearn\ensemble\_base.py", line 154, in __len__
+    return len(self.estimators_)
+               ^^^^^^^^^^^^^^^^
+AttributeError: 'IsolationForest' object has no attribute 'estimators_'. Did you mean: 'estimator'?
+2026-06-08 20:25:18,770 ERROR backend.monitor: Monitor monitor loop failed
+Traceback (most recent call last):
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\backend\monitor.py", line 69, in run
+    anomaly = self.engine.inspect_snapshot(snapshot)
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\backend\detection.py", line 162, in inspect_snapshot
+    if not self.anomaly_detector.observe(snapshot):
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\backend\detection.py", line 31, in observe
+    if not self.model or len(self.samples) < 24:
+           ^^^^^^^^^^
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\.venv\Lib\site-packages\sklearn\ensemble\_base.py", line 154, in __len__
+    return len(self.estimators_)
+               ^^^^^^^^^^^^^^^^
+AttributeError: 'IsolationForest' object has no attribute 'estimators_'. Did you mean: 'estimator'?
+2026-06-08 20:25:22,585 ERROR backend.monitor: Monitor monitor loop failed
+Traceback (most recent call last):
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\backend\monitor.py", line 69, in run
+    anomaly = self.engine.inspect_snapshot(snapshot)
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\backend\detection.py", line 162, in inspect_snapshot
+    if not self.anomaly_detector.observe(snapshot):
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\backend\detection.py", line 31, in observe
+    if not self.model or len(self.samples) < 24:
+           ^^^^^^^^^^
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\.venv\Lib\site-packages\sklearn\ensemble\_base.py", line 154, in __len__
+    return len(self.estimators_)
+               ^^^^^^^^^^^^^^^^
+AttributeError: 'IsolationForest' object has no attribute 'estimators_'. Did you mean: 'estimator'?
+2026-06-08 20:25:25,902 ERROR backend.monitor: Monitor monitor loop failed
+Traceback (most recent call last):
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\backend\monitor.py", line 69, in run
+    anomaly = self.engine.inspect_snapshot(snapshot)
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\backend\detection.py", line 162, in inspect_snapshot
+    if not self.anomaly_detector.observe(snapshot):
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\backend\detection.py", line 31, in observe
+    if not self.model or len(self.samples) < 24:
+           ^^^^^^^^^^
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\.venv\Lib\site-packages\sklearn\ensemble\_base.py", line 154, in __len__
+    return len(self.estimators_)
+               ^^^^^^^^^^^^^^^^
+AttributeError: 'IsolationForest' object has no attribute 'estimators_'. Did you mean: 'estimator'?
+2026-06-08 20:25:29,305 ERROR backend.monitor: Monitor monitor loop failed
+Traceback (most recent call last):
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\backend\monitor.py", line 69, in run
+    anomaly = self.engine.inspect_snapshot(snapshot)
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\backend\detection.py", line 162, in inspect_snapshot
+    if not self.anomaly_detector.observe(snapshot):
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\backend\detection.py", line 31, in observe
+    if not self.model or len(self.samples) < 24:
+           ^^^^^^^^^^
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\.venv\Lib\site-packages\sklearn\ensemble\_base.py", line 154, in __len__
+    return len(self.estimators_)
+               ^^^^^^^^^^^^^^^^
+AttributeError: 'IsolationForest' object has no attribute 'estimators_'. Did you mean: 'estimator'?
+2026-06-08 20:25:33,243 ERROR backend.monitor: Monitor monitor loop failed
+Traceback (most recent call last):
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\backend\monitor.py", line 69, in run
+    anomaly = self.engine.inspect_snapshot(snapshot)
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\backend\detection.py", line 162, in inspect_snapshot
+    if not self.anomaly_detector.observe(snapshot):
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\backend\detection.py", line 31, in observe
+    if not self.model or len(self.samples) < 24:
+           ^^^^^^^^^^
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\.venv\Lib\site-packages\sklearn\ensemble\_base.py", line 154, in __len__
+    return len(self.estimators_)
+               ^^^^^^^^^^^^^^^^
+AttributeError: 'IsolationForest' object has no attribute 'estimators_'. Did you mean: 'estimator'?
+2026-06-08 20:25:37,931 ERROR backend.monitor: Monitor monitor loop failed
+Traceback (most recent call last):
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\backend\monitor.py", line 69, in run
+    anomaly = self.engine.inspect_snapshot(snapshot)
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\backend\detection.py", line 162, in inspect_snapshot
+    if not self.anomaly_detector.observe(snapshot):
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\backend\detection.py", line 31, in observe
+    if not self.model or len(self.samples) < 24:
+           ^^^^^^^^^^
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\.venv\Lib\site-packages\sklearn\ensemble\_base.py", line 154, in __len__
+    return len(self.estimators_)
+               ^^^^^^^^^^^^^^^^
+AttributeError: 'IsolationForest' object has no attribute 'estimators_'. Did you mean: 'estimator'?
+2026-06-08 20:25:41,837 ERROR backend.monitor: Monitor monitor loop failed
+Traceback (most recent call last):
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\backend\monitor.py", line 69, in run
+    anomaly = self.engine.inspect_snapshot(snapshot)
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\backend\detection.py", line 162, in inspect_snapshot
+    if not self.anomaly_detector.observe(snapshot):
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\backend\detection.py", line 31, in observe
+    if not self.model or len(self.samples) < 24:
+           ^^^^^^^^^^
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\.venv\Lib\site-packages\sklearn\ensemble\_base.py", line 154, in __len__
+    return len(self.estimators_)
+               ^^^^^^^^^^^^^^^^
+AttributeError: 'IsolationForest' object has no attribute 'estimators_'. Did you mean: 'estimator'?
+2026-06-08 20:25:45,560 ERROR backend.monitor: Monitor monitor loop failed
+Traceback (most recent call last):
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\backend\monitor.py", line 69, in run
+    anomaly = self.engine.inspect_snapshot(snapshot)
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\backend\detection.py", line 162, in inspect_snapshot
+    if not self.anomaly_detector.observe(snapshot):
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\backend\detection.py", line 31, in observe
+    if not self.model or len(self.samples) < 24:
+           ^^^^^^^^^^
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\.venv\Lib\site-packages\sklearn\ensemble\_base.py", line 154, in __len__
+    return len(self.estimators_)
+               ^^^^^^^^^^^^^^^^
+AttributeError: 'IsolationForest' object has no attribute 'estimators_'. Did you mean: 'estimator'?
+2026-06-08 20:25:48,879 ERROR backend.monitor: Monitor monitor loop failed
+Traceback (most recent call last):
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\backend\monitor.py", line 69, in run
+    anomaly = self.engine.inspect_snapshot(snapshot)
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\backend\detection.py", line 162, in inspect_snapshot
+    if not self.anomaly_detector.observe(snapshot):
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\backend\detection.py", line 31, in observe
+    if not self.model or len(self.samples) < 24:
+           ^^^^^^^^^^
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\.venv\Lib\site-packages\sklearn\ensemble\_base.py", line 154, in __len__
+    return len(self.estimators_)
+               ^^^^^^^^^^^^^^^^
+AttributeError: 'IsolationForest' object has no attribute 'estimators_'. Did you mean: 'estimator'?
+2026-06-08 20:25:52,502 ERROR backend.monitor: Monitor monitor loop failed
+Traceback (most recent call last):
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\backend\monitor.py", line 69, in run
+    anomaly = self.engine.inspect_snapshot(snapshot)
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\backend\detection.py", line 162, in inspect_snapshot
+    if not self.anomaly_detector.observe(snapshot):
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\backend\detection.py", line 31, in observe
+    if not self.model or len(self.samples) < 24:
+           ^^^^^^^^^^
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\.venv\Lib\site-packages\sklearn\ensemble\_base.py", line 154, in __len__
+    return len(self.estimators_)
+               ^^^^^^^^^^^^^^^^
+AttributeError: 'IsolationForest' object has no attribute 'estimators_'. Did you mean: 'estimator'?
+2026-06-08 20:29:36,738 ERROR backend.monitor: Monitor monitor loop failed
+Traceback (most recent call last):
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\backend\monitor.py", line 69, in run
+    anomaly = self.engine.inspect_snapshot(snapshot)
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\backend\detection.py", line 162, in inspect_snapshot
+    if not self.anomaly_detector.observe(snapshot):
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\backend\detection.py", line 31, in observe
+    if not self.model or len(self.samples) < 24:
+           ^^^^^^^^^^
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\.venv\Lib\site-packages\sklearn\ensemble\_base.py", line 154, in __len__
+    return len(self.estimators_)
+               ^^^^^^^^^^^^^^^^
+AttributeError: 'IsolationForest' object has no attribute 'estimators_'. Did you mean: 'estimator'?
+2026-06-08 20:29:39,970 ERROR backend.monitor: Monitor monitor loop failed
+Traceback (most recent call last):
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\backend\monitor.py", line 69, in run
+    anomaly = self.engine.inspect_snapshot(snapshot)
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\backend\detection.py", line 162, in inspect_snapshot
+    if not self.anomaly_detector.observe(snapshot):
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\backend\detection.py", line 31, in observe
+    if not self.model or len(self.samples) < 24:
+           ^^^^^^^^^^
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\.venv\Lib\site-packages\sklearn\ensemble\_base.py", line 154, in __len__
+    return len(self.estimators_)
+               ^^^^^^^^^^^^^^^^
+AttributeError: 'IsolationForest' object has no attribute 'estimators_'. Did you mean: 'estimator'?
+2026-06-08 20:29:43,223 ERROR backend.monitor: Monitor monitor loop failed
+Traceback (most recent call last):
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\backend\monitor.py", line 69, in run
+    anomaly = self.engine.inspect_snapshot(snapshot)
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\backend\detection.py", line 162, in inspect_snapshot
+    if not self.anomaly_detector.observe(snapshot):
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\backend\detection.py", line 31, in observe
+    if not self.model or len(self.samples) < 24:
+           ^^^^^^^^^^
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\.venv\Lib\site-packages\sklearn\ensemble\_base.py", line 154, in __len__
+    return len(self.estimators_)
+               ^^^^^^^^^^^^^^^^
+AttributeError: 'IsolationForest' object has no attribute 'estimators_'. Did you mean: 'estimator'?
+2026-06-08 20:29:46,456 ERROR backend.monitor: Monitor monitor loop failed
+Traceback (most recent call last):
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\backend\monitor.py", line 69, in run
+    anomaly = self.engine.inspect_snapshot(snapshot)
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\backend\detection.py", line 162, in inspect_snapshot
+    if not self.anomaly_detector.observe(snapshot):
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\backend\detection.py", line 31, in observe
+    if not self.model or len(self.samples) < 24:
+           ^^^^^^^^^^
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\.venv\Lib\site-packages\sklearn\ensemble\_base.py", line 154, in __len__
+    return len(self.estimators_)
+               ^^^^^^^^^^^^^^^^
+AttributeError: 'IsolationForest' object has no attribute 'estimators_'. Did you mean: 'estimator'?
+2026-06-08 20:32:10,420 ERROR backend.monitor: Monitor monitor loop failed
+Traceback (most recent call last):
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\backend\monitor.py", line 69, in run
+    anomaly = self.engine.inspect_snapshot(snapshot)
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\backend\detection.py", line 162, in inspect_snapshot
+    if not self.anomaly_detector.observe(snapshot):
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\backend\detection.py", line 31, in observe
+    if not self.model or len(self.samples) < 24:
+           ^^^^^^^^^^
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\.venv\Lib\site-packages\sklearn\ensemble\_base.py", line 154, in __len__
+    return len(self.estimators_)
+               ^^^^^^^^^^^^^^^^
+AttributeError: 'IsolationForest' object has no attribute 'estimators_'. Did you mean: 'estimator'?
+2026-06-08 20:32:14,169 ERROR backend.monitor: Monitor monitor loop failed
+Traceback (most recent call last):
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\backend\monitor.py", line 69, in run
+    anomaly = self.engine.inspect_snapshot(snapshot)
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\backend\detection.py", line 162, in inspect_snapshot
+    if not self.anomaly_detector.observe(snapshot):
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\backend\detection.py", line 31, in observe
+    if not self.model or len(self.samples) < 24:
+           ^^^^^^^^^^
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\.venv\Lib\site-packages\sklearn\ensemble\_base.py", line 154, in __len__
+    return len(self.estimators_)
+               ^^^^^^^^^^^^^^^^
+AttributeError: 'IsolationForest' object has no attribute 'estimators_'. Did you mean: 'estimator'?
+2026-06-08 20:32:17,478 ERROR backend.monitor: Monitor monitor loop failed
+Traceback (most recent call last):
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\backend\monitor.py", line 69, in run
+    anomaly = self.engine.inspect_snapshot(snapshot)
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\backend\detection.py", line 162, in inspect_snapshot
+    if not self.anomaly_detector.observe(snapshot):
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\backend\detection.py", line 31, in observe
+    if not self.model or len(self.samples) < 24:
+           ^^^^^^^^^^
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\.venv\Lib\site-packages\sklearn\ensemble\_base.py", line 154, in __len__
+    return len(self.estimators_)
+               ^^^^^^^^^^^^^^^^
+AttributeError: 'IsolationForest' object has no attribute 'estimators_'. Did you mean: 'estimator'?
+2026-06-08 20:32:20,712 ERROR backend.monitor: Monitor monitor loop failed
+Traceback (most recent call last):
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\backend\monitor.py", line 69, in run
+    anomaly = self.engine.inspect_snapshot(snapshot)
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\backend\detection.py", line 162, in inspect_snapshot
+    if not self.anomaly_detector.observe(snapshot):
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\backend\detection.py", line 31, in observe
+    if not self.model or len(self.samples) < 24:
+           ^^^^^^^^^^
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\.venv\Lib\site-packages\sklearn\ensemble\_base.py", line 154, in __len__
+    return len(self.estimators_)
+               ^^^^^^^^^^^^^^^^
+AttributeError: 'IsolationForest' object has no attribute 'estimators_'. Did you mean: 'estimator'?
+2026-06-08 20:32:24,523 ERROR backend.monitor: Monitor monitor loop failed
+Traceback (most recent call last):
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\backend\monitor.py", line 69, in run
+    anomaly = self.engine.inspect_snapshot(snapshot)
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\backend\detection.py", line 162, in inspect_snapshot
+    if not self.anomaly_detector.observe(snapshot):
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\backend\detection.py", line 31, in observe
+    if not self.model or len(self.samples) < 24:
+           ^^^^^^^^^^
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\.venv\Lib\site-packages\sklearn\ensemble\_base.py", line 154, in __len__
+    return len(self.estimators_)
+               ^^^^^^^^^^^^^^^^
+AttributeError: 'IsolationForest' object has no attribute 'estimators_'. Did you mean: 'estimator'?
+2026-06-08 20:32:28,028 ERROR backend.monitor: Monitor monitor loop failed
+Traceback (most recent call last):
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\backend\monitor.py", line 69, in run
+    anomaly = self.engine.inspect_snapshot(snapshot)
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\backend\detection.py", line 162, in inspect_snapshot
+    if not self.anomaly_detector.observe(snapshot):
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\backend\detection.py", line 31, in observe
+    if not self.model or len(self.samples) < 24:
+           ^^^^^^^^^^
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\.venv\Lib\site-packages\sklearn\ensemble\_base.py", line 154, in __len__
+    return len(self.estimators_)
+               ^^^^^^^^^^^^^^^^
+AttributeError: 'IsolationForest' object has no attribute 'estimators_'. Did you mean: 'estimator'?
+2026-06-08 20:32:31,642 ERROR backend.monitor: Monitor monitor loop failed
+Traceback (most recent call last):
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\backend\monitor.py", line 69, in run
+    anomaly = self.engine.inspect_snapshot(snapshot)
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\backend\detection.py", line 162, in inspect_snapshot
+    if not self.anomaly_detector.observe(snapshot):
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\backend\detection.py", line 31, in observe
+    if not self.model or len(self.samples) < 24:
+           ^^^^^^^^^^
+  File "C:\Users\hp5cd\Desktop\hydrabad\Project\.venv\Lib\site-packages\sklearn\ensemble\_base.py", line 154, in __len__
+    return len(self.estimators_)
+               ^^^^^^^^^^^^^^^^
+AttributeError: 'IsolationForest' object has no attribute 'estimators_'. Did you mean: 'estimator'?
+2026-06-08 20:34:32,854 INFO trinetra.notifications: [HIGH] Correlated intrusion pattern | Multiple suspicious behaviors were correlated across ai-attribution, process, resource. Review the i
+2026-06-08 20:36:22,882 INFO trinetra.notifications: [HIGH] Correlated intrusion pattern | Multiple suspicious behaviors were correlated across ai-attribution, process, resource. Review the i
+2026-06-08 20:42:33,305 INFO trinetra.notifications: [HIGH] Correlated intrusion pattern | Multiple suspicious behaviors were correlated across ai-attribution, process, resource. Review the i
+2026-06-08 20:46:50,024 INFO trinetra.notifications: [HIGH] Correlated intrusion pattern | Multiple suspicious behaviors were correlated across ai-attribution, behavior, process, resource. Re
+2026-06-08 20:50:13,582 INFO trinetra.notifications: [HIGH] Correlated intrusion pattern | Multiple suspicious behaviors were correlated across ai-attribution, process, resource. Review the i
+2026-06-08 20:53:31,311 INFO trinetra.notifications: [HIGH] Correlated intrusion pattern | Multiple suspicious behaviors were correlated across ai-attribution, device, process, resource. Revi
+2026-06-08 21:02:41,312 INFO trinetra.notifications: [HIGH] Correlated intrusion pattern | Multiple suspicious behaviors were correlated across ai-attribution, process, resource. Review the i
+2026-06-08 21:06:22,689 INFO trinetra.notifications: [HIGH] Correlated intrusion pattern | Multiple suspicious behaviors were correlated across ai-attribution, behavior, process, resource. Re
+2026-06-08 21:33:09,220 INFO trinetra.notifications: [HIGH] Correlated intrusion pattern | Multiple suspicious behaviors were correlated across ai-attribution, process, resource. Review the i
+2026-06-08 21:37:23,080 INFO trinetra.notifications: [HIGH] Correlated intrusion pattern | Multiple suspicious behaviors were correlated across ai-attribution, process, resource. Review the i
+2026-06-08 21:46:46,805 INFO trinetra.notifications: [HIGH] Correlated intrusion pattern | Multiple suspicious behaviors were correlated across ai-attribution, process, resource. Review the i
+2026-06-08 21:58:01,304 INFO trinetra.notifications: [HIGH] Correlated intrusion pattern | Multiple suspicious behaviors were correlated across ai-attribution, process, resource. Review the i
+2026-06-08 22:01:59,304 INFO trinetra.notifications: [HIGH] Correlated intrusion pattern | Multiple suspicious behaviors were correlated across ai-attribution, process, resource. Review the i
+2026-06-08 22:04:31,278 INFO trinetra.notifications: [HIGH] Correlated intrusion pattern | Multiple suspicious behaviors were correlated across ai-attribution, process, resource. Review the i
+2026-06-08 22:08:27,804 INFO trinetra.notifications: [HIGH] Correlated intrusion pattern | Multiple suspicious behaviors were correlated across ai-attribution, process, resource. Review the i
+2026-06-08 22:11:34,066 INFO trinetra.notifications: [HIGH] Correlated intrusion pattern | Multiple suspicious behaviors were correlated across ai-attribution, process, resource. Review the i
+2026-06-08 23:14:34,116 INFO trinetra.notifications: [HIGH] Correlated intrusion pattern | Multiple suspicious behaviors were correlated across behavior, code-protection, process. Review the 
+2026-06-09 13:16:01,215 INFO trinetra.notifications: [HIGH] Potential threat detected in logs | Registry Started 	ProviderName=Registry
+	NewProviderState=Started
+
+	SequenceNumber=1
+
+	HostName=ConsoleHost
+	HostV
+2026-06-09 13:16:01,229 INFO trinetra.notifications: [HIGH] Correlated intrusion pattern | Multiple suspicious behaviors were correlated across process, resource, security. Review the incident chain immediately.
+2026-06-09 13:16:01,259 INFO trinetra.notifications: WPF popup sent: [HIGH] Potential threat detected in logs
+2026-06-09 13:16:01,326 INFO trinetra.notifications: WPF popup sent: [HIGH] Correlated intrusion pattern
+2026-06-10 12:09:09,216 INFO trinetra.notifications: [MEDIUM] USB storage device inserted | External USB device connected: USB Device (E:\). Review the device before opening files.
+2026-06-10 12:09:11,312 INFO trinetra.notifications: WPF popup sent: [MEDIUM] USB storage device inserted
+2026-06-10 15:21:19,396 ERROR asyncio: Exception in callback _ProactorBasePipeTransport._call_connection_lost()
+handle: <Handle _ProactorBasePipeTransport._call_connection_lost()>
+Traceback (most recent call last):
+  File "C:\Users\hp5cd\AppData\Local\Programs\Python\Python313\Lib\asyncio\events.py", line 89, in _run
+    self._context.run(self._callback, *self._args)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hp5cd\AppData\Local\Programs\Python\Python313\Lib\asyncio\proactor_events.py", line 165, in _call_connection_lost
+    self._sock.shutdown(socket.SHUT_RDWR)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+ConnectionResetError: [WinError 10054] An existing connection was forcibly closed by the remote host
+2026-06-10 15:21:21,823 ERROR asyncio: Exception in callback _ProactorBasePipeTransport._call_connection_lost()
+handle: <Handle _ProactorBasePipeTransport._call_connection_lost()>
+Traceback (most recent call last):
+  File "C:\Users\hp5cd\AppData\Local\Programs\Python\Python313\Lib\asyncio\events.py", line 89, in _run
+    self._context.run(self._callback, *self._args)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hp5cd\AppData\Local\Programs\Python\Python313\Lib\asyncio\proactor_events.py", line 165, in _call_connection_lost
+    self._sock.shutdown(socket.SHUT_RDWR)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+ConnectionResetError: [WinError 10054] An existing connection was forcibly closed by the remote host
+2026-06-10 15:21:21,961 ERROR asyncio: Exception in callback _ProactorBasePipeTransport._call_connection_lost()
+handle: <Handle _ProactorBasePipeTransport._call_connection_lost()>
+Traceback (most recent call last):
+  File "C:\Users\hp5cd\AppData\Local\Programs\Python\Python313\Lib\asyncio\events.py", line 89, in _run
+    self._context.run(self._callback, *self._args)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hp5cd\AppData\Local\Programs\Python\Python313\Lib\asyncio\proactor_events.py", line 165, in _call_connection_lost
+    self._sock.shutdown(socket.SHUT_RDWR)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+ConnectionResetError: [WinError 10054] An existing connection was forcibly closed by the remote host
+2026-06-10 15:21:22,353 ERROR asyncio: Exception in callback _ProactorBasePipeTransport._call_connection_lost()
+handle: <Handle _ProactorBasePipeTransport._call_connection_lost()>
+Traceback (most recent call last):
+  File "C:\Users\hp5cd\AppData\Local\Programs\Python\Python313\Lib\asyncio\events.py", line 89, in _run
+    self._context.run(self._callback, *self._args)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hp5cd\AppData\Local\Programs\Python\Python313\Lib\asyncio\proactor_events.py", line 165, in _call_connection_lost
+    self._sock.shutdown(socket.SHUT_RDWR)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+ConnectionResetError: [WinError 10054] An existing connection was forcibly closed by the remote host
+2026-06-10 15:21:22,437 ERROR asyncio: Exception in callback _ProactorBasePipeTransport._call_connection_lost()
+handle: <Handle _ProactorBasePipeTransport._call_connection_lost()>
+Traceback (most recent call last):
+  File "C:\Users\hp5cd\AppData\Local\Programs\Python\Python313\Lib\asyncio\events.py", line 89, in _run
+    self._context.run(self._callback, *self._args)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hp5cd\AppData\Local\Programs\Python\Python313\Lib\asyncio\proactor_events.py", line 165, in _call_connection_lost
+    self._sock.shutdown(socket.SHUT_RDWR)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+ConnectionResetError: [WinError 10054] An existing connection was forcibly closed by the remote host
+2026-06-10 15:21:22,511 ERROR asyncio: Exception in callback _ProactorBasePipeTransport._call_connection_lost()
+handle: <Handle _ProactorBasePipeTransport._call_connection_lost()>
+Traceback (most recent call last):
+  File "C:\Users\hp5cd\AppData\Local\Programs\Python\Python313\Lib\asyncio\events.py", line 89, in _run
+    self._context.run(self._callback, *self._args)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hp5cd\AppData\Local\Programs\Python\Python313\Lib\asyncio\proactor_events.py", line 165, in _call_connection_lost
+    self._sock.shutdown(socket.SHUT_RDWR)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+ConnectionResetError: [WinError 10054] An existing connection was forcibly closed by the remote host
+2026-06-10 15:21:22,604 ERROR asyncio: Exception in callback _ProactorBasePipeTransport._call_connection_lost()
+handle: <Handle _ProactorBasePipeTransport._call_connection_lost()>
+Traceback (most recent call last):
+  File "C:\Users\hp5cd\AppData\Local\Programs\Python\Python313\Lib\asyncio\events.py", line 89, in _run
+    self._context.run(self._callback, *self._args)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hp5cd\AppData\Local\Programs\Python\Python313\Lib\asyncio\proactor_events.py", line 165, in _call_connection_lost
+    self._sock.shutdown(socket.SHUT_RDWR)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+ConnectionResetError: [WinError 10054] An existing connection was forcibly closed by the remote host
+2026-06-10 15:21:22,605 ERROR asyncio: Exception in callback _ProactorBasePipeTransport._call_connection_lost()
+handle: <Handle _ProactorBasePipeTransport._call_connection_lost()>
+Traceback (most recent call last):
+  File "C:\Users\hp5cd\AppData\Local\Programs\Python\Python313\Lib\asyncio\events.py", line 89, in _run
+    self._context.run(self._callback, *self._args)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hp5cd\AppData\Local\Programs\Python\Python313\Lib\asyncio\proactor_events.py", line 165, in _call_connection_lost
+    self._sock.shutdown(socket.SHUT_RDWR)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+ConnectionResetError: [WinError 10054] An existing connection was forcibly closed by the remote host
+2026-06-10 15:21:22,806 ERROR asyncio: Exception in callback _ProactorBasePipeTransport._call_connection_lost()
+handle: <Handle _ProactorBasePipeTransport._call_connection_lost()>
+Traceback (most recent call last):
+  File "C:\Users\hp5cd\AppData\Local\Programs\Python\Python313\Lib\asyncio\events.py", line 89, in _run
+    self._context.run(self._callback, *self._args)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hp5cd\AppData\Local\Programs\Python\Python313\Lib\asyncio\proactor_events.py", line 165, in _call_connection_lost
+    self._sock.shutdown(socket.SHUT_RDWR)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+ConnectionResetError: [WinError 10054] An existing connection was forcibly closed by the remote host
