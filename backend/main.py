@@ -16,6 +16,9 @@ from .engines.ai_analysis import AIAnalysisModule
 from .engines.usb_security import USBSecurityEngine
 from .monitor import SystemMonitor
 from .telemetry import USBCollector
+from .ai.gemini_analyzer import GeminiThreatAnalyzer
+from .ai.sarvam_voice import SarvamVoiceModule
+from .ai.mitre_mapper import build_mitre_summary
 
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -24,6 +27,8 @@ db = Database()
 engine = ThreatEngine()
 ai_analysis = AIAnalysisModule()
 usb_status_scanner = USBSecurityEngine()
+gemini_analyzer = GeminiThreatAnalyzer()
+voice_module = SarvamVoiceModule()
 clients: set[WebSocket] = set()
 
 
@@ -152,6 +157,16 @@ def module_inventory() -> list[dict]:
             "name": "AI Analysis Module",
             "status": "active",
             "detail": "Local algorithm-based analysis engine — no external API dependency.",
+        },
+        {
+            "name": "Gemini Threat Intelligence",
+            "status": "active" if gemini_analyzer.available else "limited",
+            "detail": "Gemini-powered threat summarization, MITRE ATT&CK mapping, explainable alerts, and incident reports.",
+        },
+        {
+            "name": "Sarvam AI Voice Assistant",
+            "status": "active" if voice_module.available else "limited",
+            "detail": "Multilingual voice notifications (English, Hindi, Telugu) via Sarvam AI TTS with browser fallback.",
         },
     ]
 
@@ -345,6 +360,89 @@ def report():
         media_type="text/csv",
         headers={"Content-Disposition": "attachment; filename=trinetra-incident-report.csv"},
     )
+
+
+# ──────────────────────────────────────────────────────────────
+# Gemini + Sarvam AI endpoints (additive — no existing code modified)
+# ──────────────────────────────────────────────────────────────
+
+
+@app.get("/api/gemini/status")
+def get_gemini_status():
+    """Check if Gemini API is configured and available."""
+    return {
+        "available": gemini_analyzer.available,
+        "model": gemini_analyzer._model_name if gemini_analyzer._available else None,
+        "provider": "gemini" if gemini_analyzer._available else "local-fallback",
+    }
+
+
+@app.get("/api/gemini/analyze")
+def get_gemini_analysis():
+    """Gemini-powered threat analysis with MITRE ATT&CK mapping."""
+    events = db.list_events(200)
+    score = compute_risk_score(events)
+    return gemini_analyzer.analyze_threat(events, score)
+
+
+@app.post("/api/gemini/explain")
+def explain_alert(payload: dict = Body(...)):
+    """Explain why a specific alert was generated."""
+    alert_data = payload.get("alert", {})
+    all_events = db.list_events(200)
+    return gemini_analyzer.explain_alert(alert_data, all_events)
+
+
+@app.get("/api/gemini/incident-report")
+def get_incident_report():
+    """Generate AI-assisted incident report."""
+    events = db.list_events(200)
+    score = compute_risk_score(events)
+    return gemini_analyzer.generate_incident_report(events, score)
+
+
+@app.get("/api/mitre-mapping")
+def get_mitre_mapping():
+    """Get MITRE ATT&CK mapping for current events."""
+    events = db.list_events(200)
+    return build_mitre_summary(events)
+
+
+@app.post("/api/voice/speak")
+def speak_text(payload: dict = Body(...)):
+    """Convert text to speech via Sarvam AI."""
+    text = payload.get("text", "")
+    language = payload.get("language", "en")
+    if not text:
+        return {"error": "No text provided", "provider": "none"}
+    return voice_module.synthesize_speech(text, language)
+
+
+@app.post("/api/voice/alert")
+def speak_alert(payload: dict = Body(...)):
+    """Convert an alert to multilingual voice notification."""
+    alert_data = payload.get("alert", {})
+    language = payload.get("language", "en")
+    return voice_module.speak_alert(alert_data, language)
+
+
+@app.post("/api/voice/analysis")
+def speak_analysis(payload: dict = Body(...)):
+    """Convert Gemini analysis to voice notification."""
+    text = payload.get("text", "")
+    language = payload.get("language", "en")
+    if not text:
+        return {"error": "No text provided", "provider": "none"}
+    return voice_module.speak_analysis(text, language)
+
+
+@app.get("/api/voice/languages")
+def get_voice_languages():
+    """Get supported voice languages."""
+    return {
+        "languages": voice_module.get_supported_languages(),
+        "available": voice_module.available,
+    }
 
 
 @app.websocket("/ws")

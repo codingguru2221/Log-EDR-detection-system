@@ -11,6 +11,10 @@ export function useDashboard() {
   const [activity, setActivity] = useState([]);
   const [usbStatus, setUsbStatus] = useState({ connected: 0, devices: [] });
   const [aiAnalysis, setAiAnalysis] = useState(null);
+  const [geminiAnalysis, setGeminiAnalysis] = useState(null);
+  const [mitreMapping, setMitreMapping] = useState(null);
+  const [voiceLanguages, setVoiceLanguages] = useState([]);
+  const [voiceAvailable, setVoiceAvailable] = useState(false);
   const [toast, setToast] = useState(null);
   const socketRef = useRef(null);
   const lastAiFetchRef = useRef(0);
@@ -66,6 +70,25 @@ export function useDashboard() {
     }
   }, []);
 
+  const fetchVoiceLanguages = useCallback(async () => {
+    try {
+      const data = await fetch("/api/voice/languages").then((r) => r.json());
+      setVoiceLanguages(data.languages || []);
+      setVoiceAvailable(data.available || false);
+    } catch { /* ignore */ }
+  }, []);
+
+  const fetchGeminiAnalysis = useCallback(async () => {
+    try {
+      const [geminiData, mitreData] = await Promise.all([
+        fetch("/api/gemini/analyze").then((r) => r.json()),
+        fetch("/api/mitre-mapping").then((r) => r.json()),
+      ]);
+      setGeminiAnalysis(geminiData);
+      setMitreMapping(mitreData);
+    } catch { /* ignore */ }
+  }, []);
+
   const refresh = useCallback(async () => {
     const [overviewData, recentAlerts, processData, moduleData, activityData, usbData] = await Promise.all([
       fetch("/api/overview").then((r) => r.json()),
@@ -84,6 +107,14 @@ export function useDashboard() {
     if (overviewData.snapshot) setSnapshot(overviewData.snapshot);
     await fetchLogStream();
   }, [fetchLogStream, mergeActivity]);
+
+  // Fetch Gemini + MITRE + Voice on mount and every 60s
+  useEffect(() => {
+    fetchGeminiAnalysis();
+    fetchVoiceLanguages();
+    const geminiInterval = setInterval(fetchGeminiAnalysis, 60000);
+    return () => clearInterval(geminiInterval);
+  }, [fetchGeminiAnalysis, fetchVoiceLanguages]);
 
   const resetAlerts = useCallback(async () => {
     await fetch("/api/reset", { method: "POST" });
@@ -207,5 +238,5 @@ export function useDashboard() {
       a.event_type === "usb_removed"
   );
 
-  return { overview, alerts, processes, snapshot, logStream, logAlerts, modules, activity, usbStatus, aiAnalysis, toast, resetAlerts };
+  return { overview, alerts, processes, snapshot, logStream, logAlerts, modules, activity, usbStatus, aiAnalysis, geminiAnalysis, mitreMapping, voiceLanguages, voiceAvailable, toast, resetAlerts };
 }

@@ -14,7 +14,7 @@ function usbStatusText(item) {
   return "USB ACTIVITY";
 }
 
-export default function LiveThreatFeed({ alerts, activity, processes, onReset }) {
+export default function LiveThreatFeed({ alerts, activity, processes, onReset, onExplainAlert }) {
   const dedupedActivity = [];
   const seenActivity = new Set();
 
@@ -90,6 +90,13 @@ export default function LiveThreatFeed({ alerts, activity, processes, onReset })
                       <em>+{item.score}</em>
                     </h3>
                     <p>{item.category.toUpperCase()} - {item.summary}</p>
+                    <button
+                      className="explain-alert-btn"
+                      onClick={() => onExplainAlert && onExplainAlert(item)}
+                      title="Explain this alert with AI"
+                    >
+                      Why this alert?
+                    </button>
                   </div>
                   <time>{fmtTime(item.timestamp)}</time>
                 </div>

@@ -9,14 +9,19 @@ import LogDetection from "./components/LogDetection.jsx";
 import ActiveProcesses from "./components/ActiveProcesses.jsx";
 import ModuleMatrix from "./components/ModuleMatrix.jsx";
 import AIAnalysis from "./components/AIAnalysis.jsx";
+import AIThreatSummary from "./components/AIThreatSummary.jsx";
+import ExplainAlertModal from "./components/ExplainAlertModal.jsx";
+import VoiceAlertPlayer from "./components/VoiceAlertPlayer.jsx";
 import SystemActivity from "./components/SystemActivity.jsx";
 import USBSecurity from "./components/USBSecurity.jsx";
 import CollectorHealth from "./components/CollectorHealth.jsx";
 import Toast from "./components/Toast.jsx";
 import { useDashboard } from "./hooks/useDashboard.js";
+import { useState } from "react";
 
 export default function App() {
-  const { overview, alerts, processes, snapshot, logStream, logAlerts, modules, activity, usbStatus, aiAnalysis, toast, resetAlerts } = useDashboard();
+  const { overview, alerts, processes, snapshot, logStream, logAlerts, modules, activity, usbStatus, aiAnalysis, geminiAnalysis, mitreMapping, voiceLanguages, voiceAvailable, toast, resetAlerts } = useDashboard();
+  const [explainAlert, setExplainAlert] = useState(null);
 
   return (
     <>
@@ -29,13 +34,25 @@ export default function App() {
         </section>
 
         <section className="grid-main">
-          <LiveThreatFeed alerts={alerts} activity={activity} processes={processes} onReset={resetAlerts} />
+          <LiveThreatFeed alerts={alerts} activity={activity} processes={processes} onReset={resetAlerts} onExplainAlert={setExplainAlert} />
           <aside className="sidebar">
             <USBSecurity usbStatus={usbStatus} />
             <AIAnalysis analysis={aiAnalysis} />
             <ThreatSummary alerts={alerts} analysis={aiAnalysis} />
             <AlertTimeline alerts={alerts} />
           </aside>
+        </section>
+
+        <section className="grid-ai-row">
+          <AIThreatSummary
+            geminiAnalysis={geminiAnalysis}
+            mitreMapping={mitreMapping}
+            onSpeak={null}
+          />
+          <VoiceAlertPlayer
+            languages={voiceLanguages}
+            voiceAvailable={voiceAvailable}
+          />
         </section>
 
         <section className="grid-full">
@@ -56,6 +73,12 @@ export default function App() {
         </section>
 
       </main>
+      {explainAlert && (
+        <ExplainAlertModal
+          alert={explainAlert}
+          onClose={() => setExplainAlert(null)}
+        />
+      )}
       <Toast toast={toast} />
     </>
   );
