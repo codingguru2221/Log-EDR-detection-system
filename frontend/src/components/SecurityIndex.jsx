@@ -108,7 +108,7 @@ export default function SecurityIndex({ overview }) {
               </h3>
             </div>
           </div>
-          <div className="remediation-list">
+          <div className={`remediation-list ${expandedIdx >= 0 ? "has-expanded" : ""}`}>
             {remediations.map((item, idx) => {
               const emergency = isEmergency(item);
               const expanded = expandedIdx === idx;

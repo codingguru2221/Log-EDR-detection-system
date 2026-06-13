@@ -2,7 +2,7 @@ export default function StatCards({ overview }) {
   const previews = overview?.previews || {};
 
   return (
-    <>
+    <div className="stat-card-group">
       <article className="panel panel-stat">
         <span className="eyebrow">Total Alerts</span>
         <strong className="stat-value">{overview?.alerts ?? 0}</strong>
@@ -23,7 +23,7 @@ export default function StatCards({ overview }) {
         <p className="muted">Detected and scanned</p>
         <StatPreview items={previews.usb_events} empty="No USB activity" />
       </article>
-    </>
+    </div>
   );
 }
 
