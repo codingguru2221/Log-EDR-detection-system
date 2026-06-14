@@ -20,6 +20,7 @@ from .ai.gemini_analyzer import GeminiThreatAnalyzer
 from .ai.sarvam_voice import SarvamVoiceModule
 from .ai.mitre_mapper import build_mitre_summary
 from .engines.performance_optimizer import PerformanceOptimizer
+from .engines.local_analytics import LocalAnalyticsEngine
 
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -31,6 +32,7 @@ usb_status_scanner = USBSecurityEngine()
 gemini_analyzer = GeminiThreatAnalyzer()
 voice_module = SarvamVoiceModule()
 optimizer = PerformanceOptimizer()
+local_analytics = LocalAnalyticsEngine()
 clients: set[WebSocket] = set()
 
 
@@ -74,6 +76,14 @@ def visible_alerts(events: list[dict]) -> list[dict]:
 async def lifespan(app: FastAPI):
     monitor.loop = asyncio.get_running_loop()
     task = asyncio.create_task(monitor.run())
+    # Generate startup summary — single Gemini call (or local fallback)
+    try:
+        await asyncio.sleep(2)  # Let telemetry bootstrap first
+        events = db.list_events(200)
+        score = compute_risk_score(events)
+        gemini_analyzer.generate_startup_summary(events, score)
+    except Exception:
+        pass  # Startup summary is best-effort, never block app launch
     yield
     monitor.stop()
     task.cancel()
@@ -164,16 +174,26 @@ def module_inventory() -> list[dict]:
             "name": "Gemini Threat Intelligence",
             "status": "active" if gemini_analyzer.available else "limited",
             "detail": (
-                "Primary AI threat engine with 4-attempt retry logic (0s/3s/5s/10s backoff). "
-                "Provides analyst-level threat reports covering what/how/why/attack-path/impact/MITRE/actions, "
-                "SOC analyst voice briefings, and guided remediation. "
-                "Falls back to local Trinetra Algorithm only after all retries are exhausted."
+                "AI threat engine with severity gating (medium+), rate limiting (10min cooldown), "
+                "persistent response cache, and local analytics context. "
+                "Provides analyst-level threat reports, SOC analyst voice briefings, and guided remediation. "
+                "Falls back to local Trinetra Algorithm for low-severity events or when rate limited."
             ),
         },
         {
-            "name": "Sarvam AI Voice Assistant",
+            "name": "Multilingual Voice Assistant",
             "status": "active" if voice_module.available else "limited",
-            "detail": "Conversational AI security analyst with multilingual voice (EN, HI, MR, GU, TE), speech-to-text, guided remediation, threat investigation, and resolution verification.",
+            "detail": (
+                f"Conversational AI security analyst with 12 languages. "
+                f"Sarvam AI for Hindi/English, Google Cloud TTS for regional languages "
+                f"(Marathi, Gujarati, Telugu, Tamil, Kannada, Malayalam, Bengali, Punjabi, Odia, Assamese). "
+                f"3-tier fallback: Primary TTS → Sarvam → Browser."
+            ),
+        },
+        {
+            "name": "Local Analytics Engine",
+            "status": "active",
+            "detail": "Event correlation, attack chain detection, anomaly detection, incident timeline, and local report generation. No Gemini dependency.",
         },
         {
             "name": "Performance Optimizer",
@@ -396,10 +416,18 @@ def get_gemini_status():
 
 @app.get("/api/gemini/analyze")
 def get_gemini_analysis():
-    """Gemini-powered threat analysis with MITRE ATT&CK mapping."""
+    """Gemini-powered threat analysis with local analytics context.
+
+    Generates local analytics first, then passes pre-processed report to Gemini.
+    Only calls Gemini for medium+ severity (enforced by gemini_analyzer).
+    """
     events = db.list_events(200)
     score = compute_risk_score(events)
-    return gemini_analyzer.analyze_threat(events, score)
+    processes = monitor.active_processes()
+    # Generate local analytics report first
+    analytics_report = local_analytics.generate_report(events, score, processes)
+    # Pass local context to Gemini (severity gating happens inside)
+    return gemini_analyzer.analyze_threat(events, score, local_report=analytics_report)
 
 
 @app.post("/api/gemini/explain")
@@ -459,6 +487,78 @@ def get_voice_languages():
     return {
         "languages": voice_module.get_supported_languages(),
         "available": voice_module.available,
+        "google_tts_available": voice_module.google_tts.available,
+        "sarvam_available": voice_module._sarvam_available,
+    }
+
+
+@app.get("/api/analytics/report")
+def get_local_analytics_report():
+    """Generate local analytics report — no Gemini dependency.
+
+    Returns structured report with executive summary, event timeline,
+    risk assessment, attack chain analysis, and recommended actions.
+    """
+    events = db.list_events(200)
+    score = compute_risk_score(events)
+    processes = monitor.active_processes()
+    return local_analytics.generate_report(events, score, processes)
+
+
+@app.get("/api/gemini/startup-summary")
+def get_startup_summary():
+    """Get the application startup summary (generated once on launch)."""
+    if gemini_analyzer._startup_summary is not None:
+        return gemini_analyzer._startup_summary
+    # If not yet generated, return a local fallback
+    events = db.list_events(200)
+    score = compute_risk_score(events)
+    return gemini_analyzer._fallback_startup_summary(events, score)
+
+
+@app.get("/api/gemini/rate-limiter")
+def get_rate_limiter_stats():
+    """Get Gemini API rate limiter statistics."""
+    return gemini_analyzer.get_rate_limiter_stats()
+
+
+@app.get("/api/gemini/cache-stats")
+def get_cache_stats():
+    """Get Gemini response cache statistics."""
+    return gemini_analyzer.get_cache_stats()
+
+
+@app.post("/api/voice/report")
+def voice_report(payload: dict = Body(...)):
+    """Multilingual voice report pipeline.
+
+    Generates local analytics report, translates to target language,
+    and synthesizes speech via the appropriate TTS provider.
+    """
+    language = payload.get("language", "en")
+
+    events = db.list_events(200)
+    score = compute_risk_score(events)
+    processes = monitor.active_processes()
+
+    # Generate local report (English)
+    analytics = local_analytics.generate_report(events, score, processes)
+    report_text = analytics.get("report", "")
+
+    # Route through voice pipeline (translation + TTS)
+    speech = voice_module.generate_voice_report(report_text, language)
+
+    return {
+        "report_text": report_text[:500],
+        "executive_summary": analytics.get("executive_summary", ""),
+        "audio_base64": speech.get("audio_base64"),
+        "format": speech.get("format"),
+        "language": language,
+        "lang_code": speech.get("lang_code"),
+        "provider": speech.get("provider"),
+        "score": score,
+        "error": speech.get("error"),
+        "timestamp": speech.get("timestamp"),
     }
 
 

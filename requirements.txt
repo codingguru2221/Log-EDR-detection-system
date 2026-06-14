@@ -8,3 +8,4 @@ wmi==1.5.1
 watchdog==6.0.0
 google-generativeai==0.8.4
 requests==2.32.3
+google-cloud-texttospeech>=2.14.0

@@ -9,6 +9,13 @@ const LANG_LOCALES = {
   mr: "mr-IN",
   gu: "gu-IN",
   te: "te-IN",
+  ta: "ta-IN",
+  kn: "kn-IN",
+  ml: "ml-IN",
+  bn: "bn-IN",
+  pa: "pa-IN",
+  or: "or-IN",
+  as: "as-IN",
 };
 
 const VoiceAlertPlayer = forwardRef(function VoiceAlertPlayer({ languages, voiceAvailable, geminiAnalysis, overview, alerts }, ref) {
@@ -38,6 +45,10 @@ const VoiceAlertPlayer = forwardRef(function VoiceAlertPlayer({ languages, voice
   const recognitionRef = useRef(null);
 
   const useBrowserTTS = !voiceAvailable;
+  // Determine actual TTS provider for the selected language
+  const activeTTSProvider = (selectedLang === "en" || selectedLang === "hi")
+    ? (voiceAvailable ? "Sarvam AI" : "Browser TTS")
+    : "Browser TTS";
 
   // Expose play() to parent
   useImperativeHandle(ref, () => ({
@@ -93,32 +104,138 @@ const VoiceAlertPlayer = forwardRef(function VoiceAlertPlayer({ languages, voice
     setStatus("");
   }, []);
 
+  // ── Pre-warm speech synthesis on first user interaction ──
+  useEffect(() => {
+    const warmTTS = () => {
+      // Force browser to load voices
+      window.speechSynthesis.getVoices();
+      // Remove listeners after first trigger
+      document.removeEventListener("click", warmTTS);
+      document.removeEventListener("keydown", warmTTS);
+    };
+    document.addEventListener("click", warmTTS, { once: true });
+    document.addEventListener("keydown", warmTTS, { once: true });
+    return () => {
+      document.removeEventListener("click", warmTTS);
+      document.removeEventListener("keydown", warmTTS);
+    };
+  }, []);
+
+  // ── Chrome keep-alive timer (prevents 15s pause bug) ──
+  const keepAliveRef = useRef(null);
+
+  // ── Find best available browser voice for a language ──
+  const findBrowserVoice = useCallback((langCode) => {
+    const voices = window.speechSynthesis.getVoices();
+    if (!voices.length) return null;
+
+    // Priority 1: Exact match (e.g., "ta-IN")
+    let voice = voices.find((v) => v.lang === langCode);
+    if (voice) return voice;
+
+    // Priority 2: Language prefix match (e.g., "ta" matches "ta-IN" or "ta")
+    const langPrefix = langCode.split("-")[0];
+    voice = voices.find((v) => v.lang.startsWith(langPrefix));
+    if (voice) return voice;
+
+    // Priority 3: Hindi fallback (widely supported in Indian browsers)
+    voice = voices.find((v) => v.lang.startsWith("hi"));
+    if (voice) return voice;
+
+    // Priority 4: English India fallback
+    voice = voices.find((v) => v.lang === "en-IN");
+    if (voice) return voice;
+
+    // Priority 5: Any English voice
+    voice = voices.find((v) => v.lang.startsWith("en"));
+    if (voice) return voice;
+
+    // Last resort: first available voice
+    return voices[0] || null;
+  }, []);
+
   // ── Audio playback ──
-  const playAudio = useCallback((text, audioBase64, format, provider) => {
+  const playAudio = useCallback((text, audioBase64, format, provider, langCode) => {
     stopAudio();
     setPlaying(true);
     if (audioBase64 && format !== "browser-fallback") {
-      const audio = new Audio(`data:audio/wav;base64,${audioBase64}`);
+      const mimeType = format === "mp3" ? "audio/mpeg" : "audio/wav";
+      const audio = new Audio(`data:${mimeType};base64,${audioBase64}`);
       audioRef.current = audio;
       audio.onended = () => { setPlaying(false); setStatus(""); };
       audio.onerror = () => { setPlaying(false); setStatus("Audio playback failed"); };
       audio.play().catch(() => { setPlaying(false); setStatus("Audio autoplay blocked"); });
       setStatus(`Playing via ${provider}`);
     } else {
-      const langCode = LANG_LOCALES[selectedLang] || "en-IN";
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = langCode;
-      utterance.rate = 0.9;
-      utterance.pitch = 1.0;
-      utterance.onend = () => { setPlaying(false); setStatus(""); };
-      utterance.onerror = () => { setPlaying(false); setStatus("Speech synthesis failed"); };
-      window.speechSynthesis.cancel();
-      window.speechSynthesis.speak(utterance);
-      setStatus("Browser speech");
+      // Browser TTS fallback
+      const resolvedLang = langCode || LANG_LOCALES[selectedLang] || "en-IN";
+
+      const doSpeak = () => {
+        window.speechSynthesis.cancel();
+        if (keepAliveRef.current) clearInterval(keepAliveRef.current);
+
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = resolvedLang;
+        utterance.rate = 0.9;
+        utterance.pitch = 1.0;
+        utterance.volume = 1.0;
+
+        // Find and assign the best available voice
+        const voice = findBrowserVoice(resolvedLang);
+        if (voice) {
+          utterance.voice = voice;
+          utterance.lang = voice.lang; // Use voice's actual lang
+        }
+
+        utterance.onstart = () => {
+          setStatus(`Speaking (${voice?.lang || resolvedLang})`);
+          // Chrome keep-alive: resume every 10s to prevent the 15s pause bug
+          keepAliveRef.current = setInterval(() => {
+            if (window.speechSynthesis.speaking && !window.speechSynthesis.paused) {
+              window.speechSynthesis.pause();
+              window.speechSynthesis.resume();
+            }
+          }, 10000);
+        };
+        utterance.onend = () => {
+          if (keepAliveRef.current) clearInterval(keepAliveRef.current);
+          setPlaying(false);
+          setStatus("");
+        };
+        utterance.onerror = (e) => {
+          if (keepAliveRef.current) clearInterval(keepAliveRef.current);
+          setPlaying(false);
+          if (e.error !== "canceled") {
+            setStatus(`TTS error: ${e.error}`);
+          }
+        };
+
+        // Speak after a short delay to ensure cancel is processed
+        setTimeout(() => window.speechSynthesis.speak(utterance), 100);
+      };
+
+      // Voices may not be loaded yet — wait for them
+      if (window.speechSynthesis.getVoices().length > 0) {
+        doSpeak();
+      } else {
+        window.speechSynthesis.onvoiceschanged = () => {
+          doSpeak();
+          window.speechSynthesis.onvoiceschanged = null;
+        };
+        // Fallback timeout in case voiceschanged never fires
+        setTimeout(() => {
+          if (window.speechSynthesis.getVoices().length === 0) {
+            doSpeak(); // Try anyway
+          }
+        }, 1000);
+      }
+
+      setStatus(`Browser TTS (${resolvedLang})`);
     }
-  }, [selectedLang]);
+  }, [selectedLang, findBrowserVoice]);
 
   function stopAudio() {
+    if (keepAliveRef.current) clearInterval(keepAliveRef.current);
     window.speechSynthesis?.cancel();
     if (audioRef.current) {
       audioRef.current.pause();
@@ -130,6 +247,7 @@ const VoiceAlertPlayer = forwardRef(function VoiceAlertPlayer({ languages, voice
 
   useEffect(() => {
     return () => {
+      if (keepAliveRef.current) clearInterval(keepAliveRef.current);
       window.speechSynthesis?.cancel();
       if (audioRef.current) audioRef.current.pause();
       recognitionRef.current?.stop();
@@ -145,6 +263,7 @@ const VoiceAlertPlayer = forwardRef(function VoiceAlertPlayer({ languages, voice
       audio_base64: data.audio_base64,
       format: data.format,
       provider: data.provider,
+      lang_code: data.lang_code,
       ai_provider: data.ai_provider,
       mode: msgMode || data.mode || "chat",
       current_step: data.current_step,
@@ -156,7 +275,7 @@ const VoiceAlertPlayer = forwardRef(function VoiceAlertPlayer({ languages, voice
       timestamp: new Date().toISOString(),
     };
     setMessages((prev) => [...prev, msg]);
-    playAudio(responseText, data.audio_base64, data.format, data.provider);
+    playAudio(responseText, data.audio_base64, data.format, data.provider, data.lang_code);
     return msg;
   }
 
@@ -405,7 +524,7 @@ const VoiceAlertPlayer = forwardRef(function VoiceAlertPlayer({ languages, voice
 
   function replayMessage(msg) {
     if (playing) { stopAudio(); return; }
-    playAudio(msg.text, msg.audio_base64, msg.format, msg.provider);
+    playAudio(msg.text, msg.audio_base64, msg.format, msg.provider, msg.lang_code);
   }
 
   const langList = languages || [
@@ -437,8 +556,8 @@ const VoiceAlertPlayer = forwardRef(function VoiceAlertPlayer({ languages, voice
               {mode === "investigate" ? "Investigating" : mode === "guided" ? "Remediation" : "Verifying"}
             </span>
           )}
-          <span className={`ai-chip ${useBrowserTTS ? "voice-chip-fallback" : ""}`}>
-            {useBrowserTTS ? "Browser TTS" : "Sarvam AI"}
+          <span className={`ai-chip ${activeTTSProvider === "Browser TTS" ? "voice-chip-fallback" : ""}`}>
+            {activeTTSProvider}
           </span>
         </div>
       </div>
@@ -540,7 +659,7 @@ const VoiceAlertPlayer = forwardRef(function VoiceAlertPlayer({ languages, voice
                     <span>{msg.is_resolved ? "Threat Resolved" : `${msg.remaining_alerts || 0} alerts remaining`}</span>
                   </div>
                 )}
-                {msg.role === "assistant" && msg.audio_base64 && (
+                {msg.role === "assistant" && (
                   <button className={`voice-msg-replay ${playing ? "voice-playing-small" : ""}`}
                     onClick={() => replayMessage(msg)} title={playing ? "Stop" : "Replay audio"}>
                     {playing ? "⏹ Stop" : "🔊 Replay"}
