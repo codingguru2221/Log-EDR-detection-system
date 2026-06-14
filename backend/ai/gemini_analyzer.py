@@ -19,6 +19,8 @@ from collections import Counter
 from datetime import datetime, timezone
 
 from .mitre_mapper import build_mitre_summary, map_events_to_mitre
+from .gemini_rate_limiter import GeminiRateLimiter
+from .gemini_cache import GeminiCache
 
 
 # ── Gemini SDK import (graceful fallback) ──
@@ -53,9 +55,15 @@ def _get_env(key: str, default: str = "") -> str:
 class GeminiThreatAnalyzer:
     """Gemini-powered threat intelligence — read-only, no system control.
 
-    Priority: Gemini AI is always the primary engine.
-    Local Trinetra Analysis activates only after all 4 retry attempts fail.
+    Priority: Gemini AI is used ONLY for threat analysis when severity >= medium.
+    Local Trinetra Analysis activates for low-severity events or when rate limited.
     Retry delays: immediate, 3s, 5s, 10s.
+
+    Cost optimization:
+      - Severity gating: INFO/LOW -> local fallback only
+      - Rate limiting: max 1 startup call, cooldown between non-critical calls
+      - Persistent cache: similar incidents reuse previous analysis
+      - Local analytics context: Gemini receives pre-processed reports, not raw logs
     """
 
     # Retry backoff schedule (seconds): attempt 1=immediate, 2=3s, 3=5s, 4=10s
@@ -76,6 +84,10 @@ class GeminiThreatAnalyzer:
         self._retry_count: int = 0
         self._connectivity_ok: bool = False
         self._status_detail: str = ""
+        # Cost optimization modules
+        self._rate_limiter = GeminiRateLimiter()
+        self._gemini_cache = GeminiCache()
+        self._startup_summary: dict | None = None
 
         if _HAS_GENAI and self._api_key:
             try:
@@ -214,24 +226,81 @@ class GeminiThreatAnalyzer:
     # ──────────────────────────────────────────────────────────────
     # 1. Threat Summarization
     # ──────────────────────────────────────────────────────────────
-    def analyze_threat(self, events: list[dict], score: int) -> dict:
-        """Generate Gemini-powered threat analysis with MITRE mapping."""
-        cache_key = f"threat-{score}-{len(events)}"
-        if self._is_cached(cache_key):
-            return self._cache[cache_key]
+    def analyze_threat(self, events: list[dict], score: int, local_report: dict | None = None) -> dict:
+        """Generate Gemini-powered threat analysis with MITRE mapping.
+
+        Cost optimization:
+          - Severity gate: only medium+ calls Gemini
+          - Rate limiter: max 1 call per incident, cooldown for non-critical
+          - Persistent cache: reuses analysis for similar incidents
+          - Local context: uses pre-processed analytics instead of raw logs
+        """
+        # ── Severity gate: only medium+ triggers Gemini ──
+        severity = self._rate_limiter.score_to_severity(score)
+        if not self._rate_limiter.severity_allowed(severity):
+            mitre = build_mitre_summary(events)
+            result = self._fallback_threat_analysis(events, score, mitre)
+            result["severity_gate"] = f"Blocked: severity '{severity}' below medium threshold"
+            return result
+
+        # ── Persistent cache: check for similar incident ──
+        cache_key = self._gemini_cache.generate_key(events, score)
+        cached = self._gemini_cache.get(cache_key)
+        if cached:
+            cached["provider"] = "gemini-cache"
+            cached["cache_hit"] = True
+            return cached
+
+        # Also check similarity cache
+        similar = self._gemini_cache.find_similar(events, score, threshold=0.65)
+        if similar:
+            similar["provider"] = "gemini-cache"
+            similar["cache_hit"] = True
+            similar["similarity_match"] = True
+            return similar
+
+        # ── Rate limiter: check if call is allowed ──
+        incident_id = f"threat-{score}-{len(events)}"
+        if not self._rate_limiter.allow_threat_call(severity, incident_id):
+            mitre = build_mitre_summary(events)
+            result = self._fallback_threat_analysis(events, score, mitre)
+            cooldown = self._rate_limiter.get_cooldown_remaining()
+            result["rate_limited"] = True
+            result["rate_limit_detail"] = (
+                f"Gemini call deferred (rate limit). Cooldown remaining: {cooldown:.0f}s"
+            )
+            return result
+
+        # ── In-memory cache (existing) ──
+        mem_cache_key = f"threat-{score}-{len(events)}"
+        if self._is_cached(mem_cache_key):
+            return self._cache[mem_cache_key]
 
         mitre = build_mitre_summary(events)
         event_summaries = self._summarize_events(events)
 
         if not self._available:
             result = self._fallback_threat_analysis(events, score, mitre)
-            return self._store_cache(cache_key, result)
+            return self._store_cache(mem_cache_key, result)
+
+        # Build prompt — use local analytics report if available
+        local_context = ""
+        if local_report:
+            exec_summary = local_report.get("executive_summary", "")
+            correlation_data = local_report.get("correlation", {})
+            anomalies_data = local_report.get("anomalies", {})
+            local_context = f"""
+LOCAL ANALYTICS REPORT (pre-processed by Trinetra Sentinel):
+Executive Summary: {exec_summary}
+Attack Chains Detected: {correlation_data.get('chains_detected', 0)}
+Anomalies Detected: {anomalies_data.get('anomalies_detected', 0)}
+"""
 
         prompt = f"""You are Trinetra Sentinel AI, an expert SOC (Security Operations Center) analyst.
 Analyze the following endpoint security data and generate a comprehensive analyst-level threat report.
 
 CURRENT RISK SCORE: {score}/100
-
+{local_context}
 DETECTED EVENTS ({len(events)} total):
 {event_summaries}
 
@@ -271,7 +340,7 @@ Provide your report in this EXACT markdown format:
         text = self._safe_generate(prompt)
         if not text:
             result = self._fallback_threat_analysis(events, score, mitre)
-            return self._store_cache(cache_key, result)
+            return self._store_cache(mem_cache_key, result)
 
         result = {
             "analysis": text,
@@ -284,13 +353,29 @@ Provide your report in this EXACT markdown format:
             "error": None,
             "status": self._status_detail,
         }
-        return self._store_cache(cache_key, result)
+
+        # Store in both in-memory and persistent cache
+        self._store_cache(mem_cache_key, result)
+        result_with_sig = {**result, "_similarity_sig": list(
+            self._gemini_cache.generate_similarity_signature(events, score)
+        )}
+        self._gemini_cache.set(cache_key, result_with_sig)
+
+        return result
 
     # ──────────────────────────────────────────────────────────────
     # 2. Explainable Alerts
     # ──────────────────────────────────────────────────────────────
     def explain_alert(self, alert: dict, all_events: list[dict]) -> dict:
-        """Explain why a specific alert was generated."""
+        """Explain why a specific alert was generated.
+
+        Only calls Gemini for medium+ severity alerts.
+        """
+        # Severity gate: check alert severity
+        alert_severity = (alert.get("severity") or "low").lower().strip()
+        if not self._rate_limiter.severity_allowed(alert_severity):
+            return self._fallback_explain(alert, all_events)
+
         if not self._available:
             return self._fallback_explain(alert, all_events)
 
@@ -342,10 +427,36 @@ Keep it under 400 words. Use markdown formatting."""
     # 3. AI Incident Report
     # ──────────────────────────────────────────────────────────────
     def generate_incident_report(self, events: list[dict], score: int) -> dict:
-        """Generate a full AI-assisted incident report."""
+        """Generate a full AI-assisted incident report.
+
+        Only calls Gemini for medium+ severity. Uses cache and rate limiter.
+        """
+        # Severity gate
+        severity = self._rate_limiter.score_to_severity(score)
+        if not self._rate_limiter.severity_allowed(severity):
+            mitre = build_mitre_summary(events)
+            result = self._fallback_incident_report(events, score, mitre)
+            result["severity_gate"] = f"Blocked: severity '{severity}' below medium threshold"
+            return result
+
         cache_key = f"report-{score}-{len(events)}"
         if self._is_cached(cache_key):
             return self._cache[cache_key]
+
+        # Check persistent cache
+        pcache_key = self._gemini_cache.generate_key(events, score)
+        cached = self._gemini_cache.get(pcache_key)
+        if cached and "report" in cached:
+            cached["provider"] = "gemini-cache"
+            return cached
+
+        # Rate limiter
+        incident_id = f"report-{score}-{len(events)}"
+        if not self._rate_limiter.allow_threat_call(severity, incident_id):
+            mitre = build_mitre_summary(events)
+            result = self._fallback_incident_report(events, score, mitre)
+            result["rate_limited"] = True
+            return result
 
         mitre = build_mitre_summary(events)
         event_summaries = self._summarize_events(events)
@@ -459,6 +570,13 @@ Use professional cybersecurity language. Keep under 800 words."""
             "mr": "Marathi (use Devanagari script)",
             "gu": "Gujarati (use Gujarati script)",
             "te": "Telugu (use Telugu script)",
+            "ta": "Tamil (use Tamil script)",
+            "kn": "Kannada (use Kannada script)",
+            "ml": "Malayalam (use Malayalam script)",
+            "bn": "Bengali (use Bengali script)",
+            "pa": "Punjabi (use Gurmukhi script)",
+            "or": "Odia (use Odia script)",
+            "as": "Assamese (use Bengali script)",
         }
         lang_name = lang_map.get(language, "English")
 
@@ -1016,6 +1134,225 @@ Generate a verification report in {lang_name}. Rules:
             "model": "trinetra-algorithm",
             "language": language,
         }
+
+    # ──────────────────────────────────────────────────────────────
+    # 8. Startup Summary — Single Gemini call on application launch
+    # ──────────────────────────────────────────────────────────────
+    def generate_startup_summary(self, events: list[dict], score: int) -> dict:
+        """Generate a one-time system health summary on application startup.
+
+        Uses the rate limiter to ensure maximum 1 Gemini call per session.
+        If Gemini is unavailable or rate limited, returns a local fallback.
+
+        Returns:
+            dict with summary text, system health, and security posture.
+        """
+        # Return cached startup summary if already generated
+        if self._startup_summary is not None:
+            return self._startup_summary
+
+        # Check rate limiter — max 1 startup call per session
+        if not self._rate_limiter.allow_startup_call():
+            result = self._fallback_startup_summary(events, score)
+            self._startup_summary = result
+            return result
+
+        if not self._available:
+            result = self._fallback_startup_summary(events, score)
+            self._startup_summary = result
+            return result
+
+        from collections import Counter as _C
+        categories = _C(e.get("category", "unknown") for e in events[:80])
+        severities = _C(e.get("severity", "low") for e in events[:80])
+        high_count = severities.get("high", 0) + severities.get("critical", 0)
+
+        prompt = f"""You are Trinetra Sentinel AI, providing a brief startup security briefing.
+
+SYSTEM STATUS AT STARTUP:
+- Risk score: {score}/100
+- Total recent events: {len(events[:80])}
+- High/critical alerts: {high_count}
+- Top categories: {', '.join(f"{c} ({n})" for c, n in categories.most_common(5))}
+- Severity breakdown: {dict(severities)}
+
+Generate a concise startup security briefing (under 100 words) covering:
+1. System health summary (is the system healthy or compromised?)
+2. Recent security posture overview (any active threats?)
+3. Threat monitoring status (are collectors working?)
+
+Use professional but accessible language. No markdown formatting."""
+
+        text = self._safe_generate(prompt, max_tokens=300)
+        if not text:
+            result = self._fallback_startup_summary(events, score)
+            self._startup_summary = result
+            return result
+
+        import re
+        clean = text.strip()
+        clean = re.sub(r"\*{1,2}(.+?)\*{1,2}", r"\1", clean)
+        clean = re.sub(r"#{1,6}\s*", "", clean)
+        clean = re.sub(r"`{1,3}[^`]*`{1,3}", "", clean)
+        clean = re.sub(r"\n+", " ", clean).strip()
+
+        result = {
+            "summary": clean,
+            "score": score,
+            "high_alerts": high_count,
+            "provider": "gemini",
+            "model": self._model_name,
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "type": "startup_summary",
+        }
+        self._startup_summary = result
+        return result
+
+    def _fallback_startup_summary(self, events: list[dict], score: int) -> dict:
+        """Local fallback for startup summary when Gemini is unavailable."""
+        from collections import Counter as _C
+        severities = _C(e.get("severity", "low") for e in events[:80])
+        high_count = severities.get("high", 0) + severities.get("critical", 0)
+        total = len(events[:80])
+
+        if score >= 80:
+            summary = (
+                f"Trinetra Sentinel startup complete. Warning: your system risk score is "
+                f"{score} out of 100 with {high_count} high severity alerts. The security posture "
+                f"indicates a potential active threat. All monitoring engines are initialized and "
+                f"tracking {total} recent events. I recommend reviewing critical alerts immediately."
+            )
+        elif score >= 50:
+            summary = (
+                f"Trinetra Sentinel startup complete. Your system risk score is {score} out of 100. "
+                f"There are {high_count} elevated alerts that need attention. All monitoring engines "
+                f"are active and tracking {total} recent events. I suggest reviewing the threat feed."
+            )
+        elif score >= 20:
+            summary = (
+                f"Trinetra Sentinel startup complete. Risk score is {score} out of 100, indicating "
+                f"minor indicators worth monitoring. {total} events are being tracked. All security "
+                f"engines are operational. No immediate action required, but stay vigilant."
+            )
+        else:
+            summary = (
+                f"Trinetra Sentinel startup complete. Your system is secure with a risk score of "
+                f"{score} out of 100. All monitoring engines are active and tracking {total} events. "
+                f"No threats detected. I will continue monitoring and alert you if anything changes."
+            )
+
+        return {
+            "summary": summary,
+            "score": score,
+            "high_alerts": high_count,
+            "provider": "local-fallback",
+            "model": "trinetra-algorithm",
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "type": "startup_summary",
+        }
+
+    # ──────────────────────────────────────────────────────────────
+    # 9. Analyze with Local Context — Gemini receives pre-processed analytics
+    # ──────────────────────────────────────────────────────────────
+    def analyze_with_local_context(self, analytics_report: dict, score: int) -> dict:
+        """Analyze using pre-processed local analytics instead of raw logs.
+
+        This is the preferred way to call Gemini — it receives a structured
+        report from LocalAnalyticsEngine, not raw event data.
+
+        Args:
+            analytics_report: Output from LocalAnalyticsEngine.generate_report()
+            score: Current risk score
+
+        Returns:
+            Gemini analysis or local fallback.
+        """
+        severity = self._rate_limiter.score_to_severity(score)
+
+        # Severity gate
+        if not self._rate_limiter.severity_allowed(severity):
+            return {
+                "analysis": analytics_report.get("executive_summary", "System operating normally."),
+                "provider": "local-analytics",
+                "model": "trinetra-algorithm",
+                "score": score,
+                "severity_gate": f"Blocked: severity '{severity}' below medium threshold",
+                "timestamp": datetime.now(timezone.utc).isoformat(),
+            }
+
+        # Rate limiter
+        incident_id = f"local-ctx-{score}"
+        if not self._rate_limiter.allow_threat_call(severity, incident_id):
+            return {
+                "analysis": analytics_report.get("report", analytics_report.get("executive_summary", "")),
+                "provider": "local-analytics",
+                "model": "trinetra-algorithm",
+                "score": score,
+                "rate_limited": True,
+                "timestamp": datetime.now(timezone.utc).isoformat(),
+            }
+
+        if not self._available:
+            return {
+                "analysis": analytics_report.get("report", analytics_report.get("executive_summary", "")),
+                "provider": "local-analytics",
+                "model": "trinetra-algorithm",
+                "score": score,
+                "timestamp": datetime.now(timezone.utc).isoformat(),
+            }
+
+        # Build a focused prompt with the local report
+        report_text = analytics_report.get("report", "")
+        exec_summary = analytics_report.get("executive_summary", "")
+        correlation = analytics_report.get("correlation", {})
+        anomalies = analytics_report.get("anomalies", {})
+
+        prompt = f"""You are Trinetra Sentinel AI, an expert SOC analyst reviewing a local security analytics report.
+
+LOCAL ANALYTICS REPORT:
+{report_text[:2000]}
+
+EXECUTIVE SUMMARY: {exec_summary}
+ATTACK CHAINS DETECTED: {correlation.get('chains_detected', 0)}
+ANOMALIES DETECTED: {anomalies.get('anomalies_detected', 0)}
+RISK SCORE: {score}/100
+
+Based on this pre-processed analytics report, provide:
+1. Analyst-level explanation of the security situation
+2. Executive summary for leadership
+3. Recommended mitigations prioritized by urgency
+
+Keep your response under 400 words. Use markdown formatting."""
+
+        text = self._safe_generate(prompt, max_tokens=1024)
+        if not text:
+            return {
+                "analysis": analytics_report.get("report", exec_summary),
+                "provider": "local-analytics",
+                "model": "trinetra-algorithm",
+                "score": score,
+                "timestamp": datetime.now(timezone.utc).isoformat(),
+            }
+
+        return {
+            "analysis": text,
+            "provider": "gemini",
+            "model": self._model_name,
+            "score": score,
+            "local_context": True,
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+        }
+
+    # ──────────────────────────────────────────────────────────────
+    # 10. Stats — expose rate limiter and cache statistics
+    # ──────────────────────────────────────────────────────────────
+    def get_rate_limiter_stats(self) -> dict:
+        """Return rate limiter statistics for the UI."""
+        return self._rate_limiter.get_stats()
+
+    def get_cache_stats(self) -> dict:
+        """Return persistent cache statistics for the UI."""
+        return self._gemini_cache.stats()
 
     # ──────────────────────────────────────────────────────────────
     # Helpers

@@ -16,8 +16,11 @@ export function useDashboard() {
   const [voiceLanguages, setVoiceLanguages] = useState([]);
   const [voiceAvailable, setVoiceAvailable] = useState(false);
   const [toast, setToast] = useState(null);
+  const [startupSummary, setStartupSummary] = useState(null);
+  const [localReport, setLocalReport] = useState(null);
   const socketRef = useRef(null);
   const lastAiFetchRef = useRef(0);
+  const geminiFetchedRef = useRef(false);
 
   const showToast = useCallback((message, danger = false) => {
     setToast({ message, danger });
@@ -86,6 +89,21 @@ export function useDashboard() {
       ]);
       setGeminiAnalysis(geminiData);
       setMitreMapping(mitreData);
+      geminiFetchedRef.current = true;
+    } catch { /* ignore */ }
+  }, []);
+
+  const fetchStartupSummary = useCallback(async () => {
+    try {
+      const data = await fetch("/api/gemini/startup-summary").then((r) => r.json());
+      setStartupSummary(data);
+    } catch { /* ignore */ }
+  }, []);
+
+  const fetchLocalReport = useCallback(async () => {
+    try {
+      const data = await fetch("/api/analytics/report").then((r) => r.json());
+      setLocalReport(data);
     } catch { /* ignore */ }
   }, []);
 
@@ -108,20 +126,32 @@ export function useDashboard() {
     await fetchLogStream();
   }, [fetchLogStream, mergeActivity]);
 
-  // Fetch Gemini + MITRE + Voice on mount and every 60s
+  // Fetch startup summary + voice languages on mount (once)
+  useEffect(() => {
+    fetchStartupSummary();
+    fetchVoiceLanguages();
+  }, [fetchStartupSummary, fetchVoiceLanguages]);
+
+  // Fetch Gemini + MITRE on mount (once) — no more 60s polling
   useEffect(() => {
     fetchGeminiAnalysis();
-    fetchVoiceLanguages();
-    const geminiInterval = setInterval(fetchGeminiAnalysis, 60000);
-    return () => clearInterval(geminiInterval);
-  }, [fetchGeminiAnalysis, fetchVoiceLanguages]);
+  }, [fetchGeminiAnalysis]);
+
+  // Fetch local analytics report on interval (every 30s)
+  useEffect(() => {
+    fetchLocalReport();
+    const interval = setInterval(fetchLocalReport, 30000);
+    return () => clearInterval(interval);
+  }, [fetchLocalReport]);
 
   const resetAlerts = useCallback(async () => {
     await fetch("/api/reset", { method: "POST" });
     setActivity([]);
     await refresh();
     await fetchAiAnalysis(true);
-  }, [refresh, fetchAiAnalysis]);
+    geminiFetchedRef.current = false;
+    await fetchGeminiAnalysis();
+  }, [refresh, fetchAiAnalysis, fetchGeminiAnalysis]);
 
   useEffect(() => {
     refresh();
@@ -133,13 +163,6 @@ export function useDashboard() {
   useEffect(() => {
     fetchAiAnalysis(true);
     const interval = setInterval(() => fetchAiAnalysis(true), 30000);
-
-    // Listen for risk score changes from WebSocket alerts
-    let prevScore = null;
-    const checkRiskChange = () => {
-      // Re-fetch AI if overview score changed significantly
-      fetchAiAnalysis();
-    };
 
     // Listen for custom event from AIAnalysis force refresh
     const onAiRefresh = () => fetchAiAnalysis(true);
@@ -197,6 +220,14 @@ export function useDashboard() {
               if (data.score !== undefined) {
                 fetchAiAnalysis(true);
               }
+              // Fetch Gemini analysis only when a medium+ alert arrives
+              const severity = message.data.severity || "low";
+              if (
+                (severity === "medium" || severity === "high" || severity === "critical") &&
+                !geminiFetchedRef.current
+              ) {
+                fetchGeminiAnalysis();
+              }
             });
           fetchAiAnalysis();
         }
@@ -216,7 +247,11 @@ export function useDashboard() {
             };
           });
         }
-        if (message.kind === "reset") refresh();
+        if (message.kind === "reset") {
+          refresh();
+          geminiFetchedRef.current = false;
+          fetchGeminiAnalysis();
+        }
       };
 
       socket.onclose = () => {
@@ -229,7 +264,7 @@ export function useDashboard() {
       clearTimeout(reconnectTimer);
       socketRef.current?.close();
     };
-  }, [refresh, showToast, fetchLogStream, fetchAiAnalysis, mergeActivity]);
+  }, [refresh, showToast, fetchLogStream, fetchAiAnalysis, mergeActivity, fetchGeminiAnalysis]);
 
   const logAlerts = alerts.filter(
     (a) =>
@@ -238,5 +273,10 @@ export function useDashboard() {
       a.event_type === "usb_removed"
   );
 
-  return { overview, alerts, processes, snapshot, logStream, logAlerts, modules, activity, usbStatus, aiAnalysis, geminiAnalysis, mitreMapping, voiceLanguages, voiceAvailable, toast, resetAlerts };
+  return {
+    overview, alerts, processes, snapshot, logStream, logAlerts, modules,
+    activity, usbStatus, aiAnalysis, geminiAnalysis, mitreMapping,
+    voiceLanguages, voiceAvailable, toast, resetAlerts,
+    startupSummary, localReport,
+  };
 }
