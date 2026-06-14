@@ -3030,7 +3030,7 @@ td {
   }
 
   .gemini-error-pre {
-    max-height: 180px;
+    max-height: 200px;
     font-size: 0.68rem;
   }
 
@@ -3508,25 +3508,26 @@ td {
 
 .gemini-error-box {
   margin: 8px 0;
-  border: 1px solid rgba(255, 68, 68, 0.3);
+  border: 1px solid rgba(234, 179, 8, 0.3);
   border-radius: 8px;
-  background: rgba(255, 68, 68, 0.08);
-  padding: 10px 12px;
+  background: rgba(66, 32, 6, 0.2);
+  padding: 1rem;
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
+  overflow: hidden;
 }
 
 .gemini-error-pre {
-  max-height: 250px;
+  max-height: 280px;
   overflow-y: auto;
   overflow-x: hidden;
   white-space: pre-wrap;
   overflow-wrap: break-word;
   word-break: break-word;
   font-family: var(--mono);
-  font-size: 0.72rem;
-  line-height: 1.5;
+  font-size: 0.75rem;
+  line-height: 1.625;
   color: #f87171;
   margin: 0;
   width: 100%;
@@ -3537,10 +3538,10 @@ td {
 .gemini-error-toggle {
   margin-top: 6px;
   padding: 3px 10px;
-  border: 1px solid rgba(255, 68, 68, 0.25);
+  border: 1px solid rgba(234, 179, 8, 0.3);
   border-radius: 4px;
-  background: rgba(255, 68, 68, 0.1);
-  color: #f87171;
+  background: rgba(66, 32, 6, 0.25);
+  color: #fbbf24;
   font-size: 0.62rem;
   font-weight: 700;
   cursor: pointer;
@@ -3549,8 +3550,8 @@ td {
 }
 
 .gemini-error-toggle:hover {
-  border-color: rgba(255, 68, 68, 0.5);
-  background: rgba(255, 68, 68, 0.18);
+  border-color: rgba(234, 179, 8, 0.5);
+  background: rgba(66, 32, 6, 0.4);
 }
 
 .gemini-notice {

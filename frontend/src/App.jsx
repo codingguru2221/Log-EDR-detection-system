@@ -62,18 +62,17 @@ export default function App() {
             mitreMapping={mitreMapping}
             onSpeak={handleSpeakAnalysis}
           />
-          <VoiceAlertPlayer
-            ref={voicePlayerRef}
-            languages={voiceLanguages}
-            voiceAvailable={voiceAvailable}
-            geminiAnalysis={geminiAnalysis}
-            overview={overview}
-            alerts={alerts}
-          />
-        </section>
-
-        <section className="grid-full">
-          <ModuleMatrix modules={modules} />
+          <div style={{display:"flex",flexDirection:"column",gap:"1rem"}}>
+            <VoiceAlertPlayer
+              ref={voicePlayerRef}
+              languages={voiceLanguages}
+              voiceAvailable={voiceAvailable}
+              geminiAnalysis={geminiAnalysis}
+              overview={overview}
+              alerts={alerts}
+            />
+            <ModuleMatrix modules={modules} />
+          </div>
         </section>
 
         <section className="grid-full">
