@@ -43,6 +43,7 @@ param(
 )
 
 Add-Type -AssemblyName PresentationFramework,PresentationCore,WindowsBase
+Add-Type -AssemblyName System.Windows.Forms
 
 $hexStyles = [System.Globalization.NumberStyles]::HexNumber
 $r = [byte]::Parse($Color.Substring(1,2), $hexStyles)
@@ -51,48 +52,108 @@ $b = [byte]::Parse($Color.Substring(5,2), $hexStyles)
 $accentColor = [Windows.Media.Color]::FromRgb($r, $g, $b)
 $accentBrush = [Windows.Media.SolidColorBrush]::new($accentColor)
 
+# Determine icon based on severity
+$iconChar = "!"
+$iconFontSize = 16
+if ($Label -eq "CRITICAL") { $iconChar = [char]0x26D4; $iconFontSize = 18 }
+elseif ($Label -eq "HIGH") { $iconChar = [char]0x26A0; $iconFontSize = 18 }
+elseif ($Label -eq "WARNING") { $iconChar = [char]0x26A1; $iconFontSize = 16 }
+else { $iconChar = [char]0x2139; $iconFontSize = 16 }
+
 $win = New-Object Windows.Window
 $win.WindowStyle = 'None'
 $win.AllowsTransparency = $true
 $win.Background = [Windows.Media.Brushes]::Transparent
 $win.Topmost = $true
 $win.ShowInTaskbar = $false
-$win.Width = 400
-$win.Height = 140
+$win.Width = 420
+$win.Height = 160
 $win.ResizeMode = 'NoResize'
+$win.Opacity = 0
+$win.WindowStartupLocation = 'Manual'
 
 $workArea = [Windows.SystemParameters]::WorkArea
-$win.Left = $workArea.Width - 420
-$win.Top = $workArea.Height - 160
+$win.Top = $workArea.Height - 180
+$slideStart = $workArea.Width + 30
+$slideEnd = $workArea.Width - 440
+$win.Left = $slideStart
 
+# Drop shadow
+$shadow = New-Object Windows.Media.Effects.DropShadowEffect
+$shadow.Color = [Windows.Media.Colors]::Black
+$shadow.Opacity = 0.55
+$shadow.BlurRadius = 28
+$shadow.ShadowDepth = 5
+$shadow.Direction = 270
+
+# Outer grid for layering
+$outerGrid = New-Object Windows.Controls.Grid
+
+# Main card
 $border = New-Object Windows.Controls.Border
-$border.CornerRadius = [Windows.CornerRadius]::new(10)
+$border.CornerRadius = [Windows.CornerRadius]::new(14)
 $border.Background = [Windows.Media.SolidColorBrush]::new([Windows.Media.Color]::FromRgb(0x1A, 0x1A, 0x2E))
 $border.BorderBrush = $accentBrush
-$border.BorderThickness = [Windows.Thickness]::new(2)
-$border.Padding = [Windows.Thickness]::new(16, 12, 16, 12)
+$border.BorderThickness = [Windows.Thickness]::new(1.5)
+$border.Padding = [Windows.Thickness]::new(18, 18, 14, 14)
+$border.Effect = $shadow
+
+# Accent bar at top
+$accentBar = New-Object Windows.Controls.Border
+$accentBar.CornerRadius = [Windows.CornerRadius]::new(14, 14, 0, 0)
+$accentBar.Height = 4
+$accentBar.Background = $accentBrush
+$accentBar.VerticalAlignment = 'Top'
+$accentBar.HorizontalAlignment = 'Stretch'
+$accentBar.IsHitTestVisible = $false
 
 $stack = New-Object Windows.Controls.StackPanel
 
 # Header row
-$headerRow = New-Object Windows.Controls.StackPanel
-$headerRow.Orientation = 'Horizontal'
+$headerRow = New-Object Windows.Controls.Grid
+$headerRow.Height = 24
 
-$dot = New-Object Windows.Shapes.Ellipse
-$dot.Width = 10
-$dot.Height = 10
-$dot.Fill = $accentBrush
-$dot.Margin = [Windows.Thickness]::new(0, 0, 8, 0)
-$dot.VerticalAlignment = 'Center'
-$headerRow.Children.Add($dot) | Out-Null
+$headerLeft = New-Object Windows.Controls.StackPanel
+$headerLeft.Orientation = 'Horizontal'
+$headerLeft.VerticalAlignment = 'Center'
+$headerLeft.HorizontalAlignment = 'Left'
+
+$headerIcon = New-Object Windows.Controls.TextBlock
+$headerIcon.Text = $iconChar
+$headerIcon.Foreground = $accentBrush
+$headerIcon.FontSize = $iconFontSize
+$headerIcon.FontWeight = [Windows.FontWeights]::Bold
+$headerIcon.VerticalAlignment = 'Center'
+$headerIcon.Margin = [Windows.Thickness]::new(0, 0, 8, 0)
+$headerLeft.Children.Add($headerIcon) | Out-Null
 
 $headerLabel = New-Object Windows.Controls.TextBlock
-$headerLabel.Text = "TRINETRA SENTINEL - $Label"
+$headerLabel.Text = "TRINETRA SENTINEL — $Label"
 $headerLabel.Foreground = $accentBrush
 $headerLabel.FontSize = 11
 $headerLabel.FontWeight = [Windows.FontWeights]::Bold
 $headerLabel.VerticalAlignment = 'Center'
-$headerRow.Children.Add($headerLabel) | Out-Null
+$headerLeft.Children.Add($headerLabel) | Out-Null
+
+# Close button
+$closeBtn = New-Object Windows.Controls.Button
+$closeBtn.Content = [char]0x2715
+$closeBtn.Foreground = [Windows.Media.SolidColorBrush]::new([Windows.Media.Color]::FromRgb(0x88, 0x88, 0x99))
+$closeBtn.Background = [Windows.Media.Brushes]::Transparent
+$closeBtn.BorderThickness = [Windows.Thickness]::new(0)
+$closeBtn.Width = 24
+$closeBtn.Height = 24
+$closeBtn.HorizontalAlignment = 'Right'
+$closeBtn.VerticalAlignment = 'Center'
+$closeBtn.Cursor = [Windows.Input.Cursors]::Hand
+$closeBtn.FontSize = 13
+$closeBtn.Padding = [Windows.Thickness]::new(0)
+$closeBtn.Add_Click({ $win.Close(); $script:autoTimer.Stop() })
+$closeBtn.Add_MouseEnter({ $closeBtn.Foreground = [Windows.Media.Brushes]::White })
+$closeBtn.Add_MouseLeave({ $closeBtn.Foreground = [Windows.Media.SolidColorBrush]::new([Windows.Media.Color]::FromRgb(0x88, 0x88, 0x99)) })
+
+$headerRow.Children.Add($headerLeft) | Out-Null
+$headerRow.Children.Add($closeBtn) | Out-Null
 
 $stack.Children.Add($headerRow) | Out-Null
 
@@ -100,7 +161,7 @@ $stack.Children.Add($headerRow) | Out-Null
 $titleBlock = New-Object Windows.Controls.TextBlock
 $titleBlock.Text = $Title
 $titleBlock.Foreground = [Windows.Media.Brushes]::White
-$titleBlock.FontSize = 14
+$titleBlock.FontSize = 15
 $titleBlock.FontWeight = [Windows.FontWeights]::SemiBold
 $titleBlock.Margin = [Windows.Thickness]::new(0, 8, 0, 0)
 $titleBlock.TextTrimming = 'CharacterEllipsis'
@@ -113,21 +174,72 @@ $bodyBlock.Foreground = [Windows.Media.SolidColorBrush]::new([Windows.Media.Colo
 $bodyBlock.FontSize = 12
 $bodyBlock.TextWrapping = 'Wrap'
 $bodyBlock.Margin = [Windows.Thickness]::new(0, 4, 0, 0)
-$bodyBlock.MaxHeight = 60
+$bodyBlock.MaxHeight = 54
 $stack.Children.Add($bodyBlock) | Out-Null
 
-$border.Child = $stack
-$win.Content = $border
+# Animated progress bar
+$progressTrack = New-Object Windows.Controls.Border
+$progressTrack.Height = 3
+$progressTrack.CornerRadius = [Windows.CornerRadius]::new(2)
+$progressTrack.Background = [Windows.Media.SolidColorBrush]::new([Windows.Media.Color]::FromRgb(0x2A, 0x2A, 0x40))
+$progressTrack.Margin = [Windows.Thickness]::new(0, 10, 4, 0)
 
-# Auto-close timer
+$progressFill = New-Object Windows.Controls.Border
+$progressFill.CornerRadius = [Windows.CornerRadius]::new(2)
+$progressFill.Background = $accentBrush
+$progressFill.HorizontalAlignment = 'Left'
+$progressFill.Width = 384
+
+$progressTrack.Child = $progressFill
+$stack.Children.Add($progressTrack) | Out-Null
+
+$border.Child = $stack
+$outerGrid.Children.Add($border) | Out-Null
+$outerGrid.Children.Add($accentBar) | Out-Null
+$win.Content = $outerGrid
+
+# Animations
+$fadeIn = New-Object Windows.Media.Animation.DoubleAnimation
+$fadeIn.From = 0
+$fadeIn.To = 1
+$fadeIn.Duration = [Windows.Duration]::new([TimeSpan]::FromMilliseconds(250))
+$fadeIn.EasingFunction = New-Object Windows.Media.Animation.QuadraticEase
+$fadeIn.EasingFunction.EasingMode = 'EaseOut'
+
+$slideIn = New-Object Windows.Media.Animation.DoubleAnimation
+$slideIn.From = $slideStart
+$slideIn.To = $slideEnd
+$slideIn.Duration = [Windows.Duration]::new([TimeSpan]::FromMilliseconds(400))
+$slideIn.EasingFunction = New-Object Windows.Media.Animation.QuadraticEase
+$slideIn.EasingFunction.EasingMode = 'EaseOut'
+
+$progressAnim = New-Object Windows.Media.Animation.DoubleAnimation
+$progressAnim.From = 384
+$progressAnim.To = 0
+$progressAnim.Duration = [Windows.Duration]::new([TimeSpan]::FromSeconds($Duration))
+$progressAnim.EasingFunction = New-Object Windows.Media.Animation.QuadraticEase
+$progressAnim.EasingFunction.EasingMode = 'Linear'
+
 $script:autoTimer = New-Object Windows.Threading.DispatcherTimer
 $script:autoTimer.Interval = [TimeSpan]::FromSeconds($Duration)
+
 $script:autoTimer.Add_Tick({
-    $win.Close()
+    # Fade out before close
+    $fadeOut = New-Object Windows.Media.Animation.DoubleAnimation
+    $fadeOut.From = 1
+    $fadeOut.To = 0
+    $fadeOut.Duration = [Windows.Duration]::new([TimeSpan]::FromMilliseconds(200))
+    $fadeOut.EasingFunction = New-Object Windows.Media.Animation.QuadraticEase
+    $fadeOut.EasingFunction.EasingMode = 'EaseIn'
+    $fadeOut.Completed = { $win.Close() }
+    $win.BeginAnimation([Windows.Window]::OpacityProperty, $fadeOut)
     $script:autoTimer.Stop()
 })
 
 $win.Add_Loaded({
+    $win.BeginAnimation([Windows.Window]::OpacityProperty, $fadeIn)
+    $win.BeginAnimation([Windows.Window]::LeftProperty, $slideIn)
+    $progressFill.BeginAnimation([Windows.FrameworkElement]::WidthProperty, $progressAnim)
     $script:autoTimer.Start()
 })
 
